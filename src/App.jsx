@@ -16,9 +16,9 @@ const TABS = {
     { id: 'flashcards', label: 'Flashcards de Repaso',     Component: Flashcards        },
   ],
   2: [
-    { id: 'cable',    label: 'Cable con J(r)',  Component: CableJ       },
-    { id: 'rotante',  label: 'Campo rotante',   Component: CampoRotante },
-    { id: 'circuito', label: 'Circuito RC-RL',  Component: CircuitoRCRL },
+    { id: 'cable',    label: '1-a) Cable con J(r)',  Component: CableJ       },
+    { id: 'rotante',  label: '1-b) Campo rotante',   Component: CampoRotante },
+    { id: 'circuito', label: '2) Circuito RC-RL',    Component: CircuitoRCRL },
   ],
 }
 
@@ -130,7 +130,7 @@ export default function App() {
         </div>{/* end app-header-inner */}
       </header>
 
-      <div className="app">
+      <div className={`app${parcial === 2 ? ' app--nav-lateral' : ''}`}>
       <nav className="tab-bar">
         {TABS[parcial].map(({ id, label }) => (
           <button

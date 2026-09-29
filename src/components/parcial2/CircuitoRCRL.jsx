@@ -131,7 +131,8 @@ const PASOS = [
       + '\n\nSobre el inductor: al abrir S2 su corriente se corta de golpe. En la práctica salta una chispa en el interruptor y ahí se disipan los 1,39 mJ. No afecta a los capacitores, que están en otra malla.',
     formula: [
       '\\frac{q}{C_{eq}} - i\\,(R_2 + R_3) = 0 \\;\\Rightarrow\\; \\frac{dq}{dt} = -\\frac{q}{(R_2+R_3)\\,C_{eq}}',
-      'q(t) = Q_0\\, e^{-t/\\tau} \\qquad \\tau = (R_2+R_3)\\,C_{eq} = 5 \\cdot 1{,}5\\times10^{-3} = 7{,}5\\ \\text{ms}',
+      'q(t) = Q_0\\, e^{-t/\\tau}',
+      '\\tau = (R_2+R_3)\\,C_{eq} = 5 \\cdot 1{,}5\\times10^{-3} = 7{,}5\\ \\text{ms}',
     ],
     simbolos: [
       { simbolo: 'q(t)',   significado: 'Carga en cada capacitor en el instante t [C]' },
@@ -151,9 +152,9 @@ const PASOS = [
   {
     titulo: 'f) Potencia y energía disipadas en R2',
     texto: 'El inciso pide describir cómo se calcularía. El procedimiento:'
-      + '\n- 1) Obtener la corriente de descarga derivando $q(t)$.'
-      + '\n- 2) Calcular la potencia en R2 con la Ley de Joule, $P = i^2 R_2$. Varía en el tiempo.'
-      + '\n- 3) Como la potencia no es constante, la energía no es $P \\cdot t$: hay que integrar la potencia desde 0 hasta 5 s.'
+      + '\n1) Obtener la corriente de descarga derivando $q(t)$.'
+      + '\n2) Calcular la potencia en R2 con la Ley de Joule, $P = i^2 R_2$. Varía en el tiempo.'
+      + '\n3) Como la potencia no es constante, la energía no es $P \\cdot t$: hay que integrar la potencia desde 0 hasta 5 s.'
       + '\n\nComo 5 s son unas 667 constantes de tiempo, $e^{-10/\\tau}$ es prácticamente 0: en esos 5 s R2 disipa toda la energía que le corresponde.'
       + '\n\n**Verificación:** los capacitores tenían $U_C = \\frac{1}{2}C_{eq}V^2 \\approx 4{,}69$ mJ. R2 y R3 están en serie (misma corriente), así que se reparten esa energía en proporción a su resistencia, 2 : 3. R2 se lleva $\\frac{2}{5}\\cdot 4{,}69 \\approx 1{,}875$ mJ ✓',
     formula: [

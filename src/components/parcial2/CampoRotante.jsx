@@ -59,7 +59,8 @@ const PASOS = [
     formula: [
       '\\Phi = \\int \\vec B \\cdot d\\vec A = (\\vec B \\cdot \\hat n)\\, A',
       'A = \\pi a^2 = \\pi (0{,}20)^2 = 0{,}04\\pi \\approx 0{,}126\\ \\text{m}^2',
-      '\\Phi_1(t) = B_0 A \\cos(\\omega t) \\qquad \\Phi_2(t) = B_0 A \\sin(\\omega t)',
+      '\\Phi_1(t) = B_0 A \\cos(\\omega t)',
+      '\\Phi_2(t) = B_0 A \\sin(\\omega t)',
     ],
     simbolos: [
       { simbolo: '\\Phi',     significado: 'Flujo magnético [Wb = T·m²]' },
@@ -82,8 +83,10 @@ const PASOS = [
       + '\n\nVerificación con Lenz en $t = 0$: $B$ está horizontal, así que el flujo de la espira 2 es 0, pero empieza a crecer hacia arriba. La corriente inducida crea un campo hacia abajo para oponerse: sentido horario visto desde arriba, que coincide con $I_2(0) < 0$.',
     formula: [
       '\\varepsilon = -\\frac{d\\Phi}{dt}',
-      '\\varepsilon_1(t) = B_0 A \\omega \\sin(\\omega t) \\qquad \\varepsilon_2(t) = -B_0 A \\omega \\cos(\\omega t)',
-      'I_1(t) = \\frac{B_0 A \\omega}{R}\\sin(\\omega t) \\qquad I_2(t) = -\\frac{B_0 A \\omega}{R}\\cos(\\omega t)',
+      '\\varepsilon_1(t) = B_0 A \\omega \\sin(\\omega t)',
+      '\\varepsilon_2(t) = -B_0 A \\omega \\cos(\\omega t)',
+      'I_1(t) = \\frac{B_0 A \\omega}{R}\\sin(\\omega t)',
+      'I_2(t) = -\\frac{B_0 A \\omega}{R}\\cos(\\omega t)',
     ],
     simbolos: [
       { simbolo: '\\varepsilon',       significado: 'fem inducida [V]' },
@@ -112,7 +115,8 @@ const PASOS = [
       'I_2(t) = -I_0\\cos(\\omega t) = I_0 \\sin\\!\\left(\\omega t - \\frac{\\pi}{2}\\right)',
       '\\varepsilon_0 = B_0\\, \\pi a^2\\, \\omega = 0{,}08\\pi^2 B_0 \\approx 0{,}79\\, B_0\\ \\text{V}',
       'I_0 = \\frac{\\varepsilon_0}{R} \\approx 0{,}039\\, B_0\\ \\text{A}',
-      'T = \\frac{2\\pi}{\\omega} = 1\\ \\text{s} \\qquad f = 1\\ \\text{Hz} \\qquad \\Delta t = \\frac{T}{4} = 0{,}25\\ \\text{s}',
+      'T = \\frac{2\\pi}{\\omega} = 1\\ \\text{s} \\qquad f = 1\\ \\text{Hz}',
+      '\\Delta t = \\frac{T}{4} = 0{,}25\\ \\text{s}',
     ],
     simbolos: [
       { simbolo: '\\varepsilon_0', significado: 'Amplitud (valor máximo) de la fem [V]' },

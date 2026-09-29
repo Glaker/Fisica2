@@ -111,8 +111,11 @@
 }
 
 .stp-text ul,
+.stp-text ol,
 .stp-collapse ul,
-.stp-defensa-a ul {
+.stp-collapse ol,
+.stp-defensa-a ul,
+.stp-defensa-a ol {
   padding-left: 1.3rem;
 }
 

@@ -17,6 +17,9 @@ const PX_POR_MC = 80              // descarga: avance ∝ carga que ya circuló 
 const TIEMPOS_MS = Array.from({ length: 201 }, (_, k) => (k * T_FIN_MS) / 200)
 const DATOS_Q = TIEMPOS_MS.map(t => ({ t, q: qDescarga(t / 1000) * 1000 }))
 
+// Corriente con unidad: por debajo de 0,1 A se muestra en mA
+const fmtCorriente = i => (Math.abs(i) < 0.1 ? `${fmt(i * 1000, 1)} mA` : `${fmt(i, 3)} A`)
+
 const ETIQ_0 = '1 A'
 const ETIQ_INF = '5/6 A ≈ 0,833 A'
 
@@ -132,7 +135,7 @@ export default function CircuitoVisual({ paso }) {
           <Lecturas>
             <Lectura titulo="t" valor={`${fmt(tMs, 1)} ms`} extra={`${fmt(tMs / TAU_MS, 2)} τ`} />
             <Lectura titulo="q" valor={`${fmt(qDescarga(t) * 1000, 3)} mC`} extra="en C₁ y en C₂ (serie)" color="#8e24aa" />
-            <Lectura titulo="i" valor={`${fmt(iDescarga(t), 3)} A`} color="#1565c0" />
+            <Lectura titulo="i" valor={fmtCorriente(iDescarga(t))} color="#1565c0" />
           </Lecturas>
           <GraficoQ tMs={tMs} />
         </>
@@ -174,7 +177,7 @@ function estadoRamas(paso, reloj, t) {
   // Descarga: sale de C por R2 hacia B (rama 3 al revés), baja por R3 a D (rama 4 a favor)
   // y vuelve a los capacitores por C2 (rama 5 al revés)
   const q = (Q_CAP - qDescarga(t)) * 1000     // mC que ya circularon
-  const etiqueta = `${fmt(iDescarga(t), 3)} A`
+  const etiqueta = fmtCorriente(iDescarga(t))
   const activa = signo => ({ modo: 'activa', etiqueta, s: signo * PX_POR_MC * q })
   return {
     1: { modo: 'inactiva' }, 2: { modo: 'inactiva' }, 6: { modo: 'inactiva' },
