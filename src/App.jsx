@@ -4,17 +4,27 @@ import FieldSuperposition from './components/FieldSuperposition'
 import CapacitorCircuit from './components/CapacitorCircuit'
 import Flashcards from './components/Flashcards'
 import ConductoresConcentricos from './components/ConductoresConcentricos'
+import CableJ from './components/parcial2/CableJ'
+import CampoRotante from './components/parcial2/CampoRotante'
+import CircuitoRCRL from './components/parcial2/CircuitoRCRL'
 
-const TABS = [
-  { id: 'conductores', label: 'Conductores Concéntricos', Component: ConductoresConcentricos },
-  { id: 'fields',     label: 'Superposición de Campos',  Component: FieldSuperposition },
-  { id: 'capacitors', label: 'Circuito de Capacitores',  Component: CapacitorCircuit  },
-  { id: 'flashcards', label: 'Flashcards de Repaso',     Component: Flashcards        },
-]
+const TABS = {
+  1: [
+    { id: 'conductores', label: 'Conductores Concéntricos', Component: ConductoresConcentricos },
+    { id: 'fields',     label: 'Superposición de Campos',  Component: FieldSuperposition },
+    { id: 'capacitors', label: 'Circuito de Capacitores',  Component: CapacitorCircuit  },
+    { id: 'flashcards', label: 'Flashcards de Repaso',     Component: Flashcards        },
+  ],
+  2: [
+    { id: 'cable',    label: 'Cable con J(r)',  Component: CableJ       },
+    { id: 'rotante',  label: 'Campo rotante',   Component: CampoRotante },
+    { id: 'circuito', label: 'Circuito RC-RL',  Component: CircuitoRCRL },
+  ],
+}
 
 const PARCIALES = [
   { id: 1, label: 'Parcial 1 · Electrostática' },
-  { id: 2, label: 'Parcial 2 ', disabled: true },
+  { id: 2, label: 'Parcial 2 · Electromagnetismo' },
 ]
 
 const PARTICIPANTES = [
@@ -26,8 +36,11 @@ const PARTICIPANTES = [
 ]
 
 export default function App() {
-  const [parcial, setParcial]       = useState(1)
-  const [activeTab, setActiveTab]   = useState('conductores')
+  const [parcial, setParcial]       = useState(2)
+  // Pestaña activa de cada parcial (se recuerda al cambiar de parcial)
+  const [activeTabs, setActiveTabs] = useState({ 1: 'conductores', 2: 'cable' })
+  const activeTab                   = activeTabs[parcial]
+  const setActiveTab = id => setActiveTabs(prev => ({ ...prev, [parcial]: id }))
   const [menuOpen, setMenuOpen]     = useState(false)
   const menuRef                     = useRef(null)
 
@@ -43,7 +56,7 @@ export default function App() {
     return () => document.removeEventListener('pointerdown', onPointerDown)
   }, [menuOpen])
 
-  const { Component } = TABS.find(t => t.id === activeTab)
+  const { Component } = TABS[parcial].find(t => t.id === activeTab)
 
   return (
     <>
@@ -119,7 +132,7 @@ export default function App() {
 
       <div className="app">
       <nav className="tab-bar">
-        {TABS.map(({ id, label }) => (
+        {TABS[parcial].map(({ id, label }) => (
           <button
             key={id}
             className={`tab-btn${activeTab === id ? ' active' : ''}`}

@@ -1,0 +1,82 @@
+/* ── Visual (resolución) ───────────────────────────────────────────────────── */
+.cr-visual {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.cr-controls {
+  margin-bottom: 0;
+}
+
+.cr-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem .75rem;
+}
+
+.cr-play {
+  min-width: 6.5rem;
+}
+
+.cr-vel {
+  display: flex;
+  gap: .3rem;
+}
+
+.cr-vel .tab-btn {
+  padding: .4rem .7rem;
+}
+
+.cr-b0 {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  margin-left: auto;
+  font-size: .88rem;
+  font-weight: 600;
+  color: #1a237e;
+}
+
+.cr-b0 input {
+  width: 5.5rem;
+  padding: .35rem .5rem;
+  border: 2px solid #c5cae9;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 500;
+  color: #1a1a2e;
+  background: #fff;
+}
+
+.cr-b0 input:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+.cr-b0-nota {
+  font-size: .75rem;
+  color: #777;
+  text-align: right;
+  margin-top: -.35rem;
+}
+
+.cr-theta {
+  min-width: 4.5rem;
+  font-size: .95rem;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.cr-svg {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: block;
+}
+
+.cr-visual .fs-chart-wrap {
+  margin-top: 0;
+  background: #fff;
+}

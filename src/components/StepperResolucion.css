@@ -1,0 +1,221 @@
+/* ── Layout: visual (55%) | pasos ──────────────────────────────────────────── */
+.stp-root {
+  display: grid;
+  grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+  gap: 1.5rem;
+  align-items: start;
+  scroll-margin-top: 1rem;
+}
+
+.stp-visual {
+  position: sticky;
+  top: 1rem;
+  background: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(30,42,120,0.08);
+  padding: 1rem;
+  min-height: 320px;
+}
+
+.stp-visual-empty {
+  height: 100%;
+  min-height: 288px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9fa8da;
+  font-size: .9rem;
+  border: 2px dashed #c5cae9;
+  border-radius: 8px;
+}
+
+.stp-side {
+  min-width: 0;
+}
+
+/* ── Fila de pasos numerados ───────────────────────────────────────────────── */
+.stp-nav {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  padding: .5rem 0 .75rem;
+  background: #fff;
+}
+
+.stp-num {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid #1a237e;
+  background: #fff;
+  color: #1a237e;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.stp-num:hover {
+  background: #ede9fe;
+  border-color: #6366f1;
+  color: #4338ca;
+}
+
+.stp-num--done {
+  background: #e8eaf6;
+}
+
+.stp-num--active,
+.stp-num--active:hover {
+  background: #1a237e;
+  border-color: #1a237e;
+  color: #fff;
+}
+
+/* ── Tarjeta del paso ──────────────────────────────────────────────────────── */
+.stp-card {
+  background: #f5f7ff;
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 2px 8px rgba(30,42,120,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: .85rem;
+}
+
+.stp-card-kicker {
+  font-size: .73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: #888;
+  margin-bottom: -.5rem;
+}
+
+.stp-card-title {
+  font-size: 1.1rem;
+  color: #1a237e;
+}
+
+.stp-text {
+  font-size: .9rem;
+  line-height: 1.7;
+  color: #333;
+}
+
+.stp-text > * + * {
+  margin-top: .6rem;
+}
+
+.stp-text ul,
+.stp-collapse ul,
+.stp-defensa-a ul {
+  padding-left: 1.3rem;
+}
+
+.stp-formula {
+  background: #fff;
+  border-left: 4px solid #1a237e;
+  border-radius: 8px;
+  padding: .25rem .9rem;
+  color: #1a237e;
+  overflow-x: auto;
+}
+
+.stp-collapse .cc2-accordion-body {
+  overflow-x: auto;
+}
+
+/* Lista de símbolos */
+.stp-symbols {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.stp-symbol-row {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: .75rem;
+  align-items: baseline;
+}
+
+.stp-symbol-row dt {
+  color: #1a237e;
+  text-align: center;
+}
+
+/* Pregunta de defensa */
+.stp-defensa {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-left: 4px solid #f9a825;
+  border-radius: 8px;
+  padding: .75rem .9rem;
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.stp-defensa-label {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: #e65100;
+  margin-bottom: .3rem;
+}
+
+.stp-defensa-q {
+  font-weight: 600;
+  color: #3e2723;
+}
+
+.stp-defensa-toggle {
+  margin-top: .5rem;
+  background: none;
+  border: none;
+  padding: 0;
+  color: #e65100;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.stp-defensa-a {
+  margin-top: .5rem;
+  color: #4e342e;
+}
+
+.stp-defensa-a p + p {
+  margin-top: .5rem;
+}
+
+/* Anterior / Siguiente */
+.stp-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-top: .25rem;
+}
+
+.stp-controls .tab-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Pantallas angostas: visual arriba, pasos abajo ────────────────────────── */
+@media (max-width: 860px) {
+  .stp-root {
+    grid-template-columns: 1fr;
+  }
+
+  .stp-visual {
+    position: static;
+    min-height: 0;
+  }
+}

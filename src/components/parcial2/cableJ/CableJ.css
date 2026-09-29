@@ -1,0 +1,109 @@
+/* ── Enunciado ─────────────────────────────────────────────────────────────── */
+.cj-esquema {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  background: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(30,42,120,0.08);
+  padding: 1rem;
+}
+
+.cj-svg-lateral {
+  flex: 2 1 320px;
+  max-width: 480px;
+}
+
+.cj-esquema-corte {
+  flex: 1 1 200px;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cj-svg-corte {
+  width: 100%;
+  max-width: 180px;
+}
+
+/* Leyenda de J (compartida con el visual) */
+.cj-leyenda {
+  width: 100%;
+  max-width: 280px;
+  margin: .5rem auto 0;
+}
+
+.cj-leyenda-bar {
+  height: 10px;
+  border-radius: 5px;
+  border: 1px solid #c5cae9;
+  background: linear-gradient(90deg,
+    rgba(21,101,192,0) 0%,
+    rgba(21,101,192,.04) 20%,
+    rgba(21,101,192,.16) 40%,
+    rgba(21,101,192,.36) 60%,
+    rgba(21,101,192,.64) 80%,
+    rgba(21,101,192,1) 100%);
+}
+
+.cj-leyenda-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: .7rem;
+  color: #666;
+  margin-top: .2rem;
+}
+
+.cj-leyenda-text {
+  margin-top: .4rem;
+  font-size: .82rem;
+  color: #1a237e;
+  text-align: center;
+}
+
+/* ── Visual (resolución) ───────────────────────────────────────────────────── */
+.cj-visual {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.cj-svg-visual {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  display: block;
+}
+
+.cj-caption {
+  text-align: center;
+  font-size: .85rem;
+  color: #2e7d32;
+}
+
+.cj-controls {
+  margin-bottom: 0;
+}
+
+.cj-todo-cable {
+  align-self: flex-start;
+  padding: .3rem .8rem;
+  border-radius: 999px;
+  background: #fff3e0;
+  border: 1px solid #ffb74d;
+  color: #e65100;
+  font-size: .82rem;
+  font-weight: 700;
+}
+
+.cj-visual .fs-chart-wrap {
+  margin-top: 0;
+  background: #fff;
+}
+
+.cj-c-box {
+  background: #fff;
+  color: #1a237e;
+}

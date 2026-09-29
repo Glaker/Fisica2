@@ -1,0 +1,49 @@
+/* ── Visual (resolución) ───────────────────────────────────────────────────── */
+.ci-visual {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.ci-svg {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  display: block;
+}
+
+.ci-selector {
+  display: flex;
+  gap: .4rem;
+  justify-content: center;
+}
+
+.ci-controls {
+  margin-bottom: 0;
+}
+
+.ci-play {
+  min-width: 6.5rem;
+  flex-shrink: 0;
+}
+
+.ci-nota {
+  font-size: .82rem;
+  line-height: 1.55;
+  color: #555;
+  text-align: center;
+}
+
+.ci-nota--recuadro {
+  text-align: left;
+  color: #6a1b9a;
+  background: #f3e5f5;
+  border: 1.5px dashed #8e24aa;
+  border-radius: 8px;
+  padding: .5rem .75rem;
+}
+
+.ci-visual .fs-chart-wrap {
+  margin-top: 0;
+  background: #fff;
+}
