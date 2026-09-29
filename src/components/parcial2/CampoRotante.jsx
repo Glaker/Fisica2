@@ -2,6 +2,7 @@ import EjercicioLayout from './EjercicioLayout'
 import CampoRotanteEnunciado from './campoRotante/CampoRotanteEnunciado'
 import CampoRotanteVisual from './campoRotante/CampoRotanteVisual'
 import './campoRotante/CampoRotante.css'
+import * as teoria from './teoria/teoria1b'
 
 // Pasos de la resolución (ver formato en StepperResolucion.jsx).
 // El Visual espera 5 pasos (índices 0 a 4).
@@ -141,6 +142,7 @@ export default function CampoRotante() {
       enunciado={<CampoRotanteEnunciado />}
       pasos={PASOS}
       Visual={CampoRotanteVisual}
+      teoria={{ secciones: teoria.SECCIONES, preguntas: teoria.PREGUNTAS }}
     />
   )
 }

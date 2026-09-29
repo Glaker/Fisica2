@@ -16,15 +16,18 @@ import './StepperResolucion.css'
  *       pregunta: 'Pregunta de defensa' | { pregunta, respuesta }   (opcional)
  *     }
  *   Visual — componente que recibe `paso` (índice activo, base 0) y dibuja el gráfico.
+ *   pasoInicial — índice (base 0) con el que arranca; por defecto el primero.
+ *   onPasoChange(i) — se llama cuando el usuario cambia de paso (no al montar).
  */
-export default function StepperResolucion({ pasos, Visual }) {
-  const [paso, setPaso] = useState(0)
+export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPasoChange }) {
+  const [paso, setPaso] = useState(() => Math.min(Math.max(pasoInicial, 0), Math.max(pasos.length - 1, 0)))
   const rootRef = useRef(null)
   const firstRender = useRef(true)
 
   // Al cambiar de paso, si el comienzo del stepper quedó fuera de pantalla, volver arriba
   useEffect(() => {
     if (firstRender.current) { firstRender.current = false; return }
+    onPasoChange?.(paso)
     const el = rootRef.current
     if (el && el.getBoundingClientRect().top < 0) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })

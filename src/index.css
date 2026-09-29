@@ -14,3 +14,11 @@ body {
   color: #1a1a2e;
   min-height: 100vh;
 }
+
+/* La app ocupa al menos toda la pantalla: la landing usa el espacio sobrante
+   para centrar su hoja verticalmente */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   ReferenceLine, ReferenceArea, ReferenceDot,
@@ -11,9 +11,11 @@ import { I_TOTAL, R, J_PROM, iEnc, campoB, densidadJ, fmt } from './datos'
 // ── Geometría del SVG ────────────────────────────────────────────────────────
 const CX = 150, CY = 150
 const R_MM = R * 1000               // 5 mm
-const R_PX = 44                     // el círculo de 3R (132 px) entra en el lienzo
 const R_MAX_MM = 3 * R_MM           // rango del slider: 0 a 3R
-const toPx = rMm => (rMm / R_MM) * R_PX
+const PX_POR_MM = 44 / R_MM         // escala fija: el círculo de 3R (132 px) entra en el lienzo
+// Pasos con zoom: el círculo mayor (cable o camino) ocupa ~80 % del alto (radio 120 de 150)
+const RADIO_ZOOM_PX = 120
+const PASOS_ZOOM = [2, 3]
 
 const COLOR_B = '#2e7d32'
 const COLOR_ENC = '#ff9800'
@@ -56,6 +58,11 @@ export default function CableJVisual({ paso }) {
   const ienc = iEnc(rM)
   const todoElCable = rMm >= R_MM
 
+  // Escala (px por mm): en los pasos con zoom sigue al slider con una transición suave
+  const escalaObjetivo = PASOS_ZOOM.includes(paso) ? RADIO_ZOOM_PX / Math.max(rMm, R_MM) : PX_POR_MM
+  const escala = useSuavizado(escalaObjetivo)
+  const cablePx = R_MM * escala
+
   return (
     <div className="cj-visual">
       <svg viewBox="0 0 300 300" className="cj-svg-visual"
@@ -67,22 +74,23 @@ export default function CableJVisual({ paso }) {
           </marker>
         </defs>
 
-        <CorteJ cx={CX} cy={CY} radio={R_PX} gradId="cj-grad-visual" />
+        <CorteJ cx={CX} cy={CY} radio={cablePx} gradId="cj-grad-visual" />
 
         {/* Región encerrada por el camino amperiano */}
         {conSlider && rMm > 0 && (
           <>
-            <circle cx={CX} cy={CY} r={toPx(Math.min(rMm, R_MM))}
+            <circle cx={CX} cy={CY} r={Math.min(rMm, R_MM) * escala}
                     fill={COLOR_ENC} fillOpacity={0.35} />
             <SaleDePantalla cx={CX} cy={CY} />
           </>
         )}
 
         {/* Cota del radio del cable */}
-        <CotaRadio rPx={R_PX} angulo={-40} label="R" color="#0d47a1" />
+        <CotaRadio rPx={cablePx} angulo={-40} label="R" color="#0d47a1" />
 
         {rAmp != null && rAmp > 0 && (
-          <CaminoAmperiano rPx={toPx(rAmp)} label={paso === 1 ? '2R' : 'r'} />
+          <CaminoAmperiano rPx={rAmp * escala} cablePx={cablePx}
+                           adentro={rAmp < R_MM} label={paso === 1 ? '2R' : 'r'} />
         )}
       </svg>
 
@@ -129,14 +137,48 @@ export default function CableJVisual({ paso }) {
   )
 }
 
-// Círculo punteado con flechas de B tangentes en sentido antihorario
-function CaminoAmperiano({ rPx, label }) {
-  const N = 8
-  // Semiancho angular de cada flecha: ~11 px de arco, como mucho 14°
-  const delta = Math.min((14 * Math.PI) / 180, 11 / rPx)
-  const punto = a => [CX + rPx * Math.cos(a), CY - rPx * Math.sin(a)]
-  const aLabel = (135 * Math.PI) / 180
-  const [lx, ly] = punto(aLabel)
+// Valor que sigue a `objetivo` con una transición exponencial suave (~0,12 s)
+function useSuavizado(objetivo, tau = 0.12) {
+  const [valor, setValor] = useState(objetivo)
+  const valorRef = useRef(objetivo)
+
+  useEffect(() => {
+    let id, previo = performance.now()
+    const frame = ahora => {
+      const dt = (ahora - previo) / 1000
+      previo = ahora
+      const v = valorRef.current
+      const nuevo = Math.abs(objetivo - v) < 1e-3 * objetivo
+        ? objetivo
+        : v + (objetivo - v) * (1 - Math.exp(-dt / tau))
+      valorRef.current = nuevo
+      setValor(nuevo)
+      if (nuevo !== objetivo) id = requestAnimationFrame(frame)
+    }
+    id = requestAnimationFrame(frame)
+    return () => cancelAnimationFrame(id)
+  }, [objetivo, tau])
+
+  return valor
+}
+
+// Círculo punteado con flechas de B tangentes en sentido antihorario.
+// Adentro del cable (r < R): 4 flechas más chicas y etiquetas afuera del cable con línea guía.
+function CaminoAmperiano({ rPx, cablePx, adentro, label }) {
+  const N = adentro ? 4 : 8
+  const desfase = adentro ? 0 : 0.5          // con 4 flechas: 0°, 90°, … → 45° y 135° quedan libres
+  const arco = adentro ? 7 : 11              // semilargo de cada flecha en px de arco
+  const grosor = adentro ? 1.7 : 2.4         // la punta (marker) escala con el grosor
+  const delta = Math.min((14 * Math.PI) / 180, arco / rPx)
+  const punto = (a, rr = rPx) => [CX + rr * Math.cos(a), CY - rr * Math.sin(a)]
+
+  // Etiquetas: sobre el camino, o afuera del cable si el camino queda adentro
+  const rEtiqueta = adentro ? cablePx + 16 : rPx
+  const aR = (135 * Math.PI) / 180, aB = Math.PI / 4
+  const [rx, ry] = punto(aR)
+  const [rlx, rly] = punto(aR, rEtiqueta)
+  const [bx, by] = punto(aB)
+  const [blx, bly] = punto(aB, adentro ? rEtiqueta : rPx + 10)
 
   return (
     <g>
@@ -144,25 +186,34 @@ function CaminoAmperiano({ rPx, label }) {
               strokeWidth={1.6} strokeDasharray="5 4" />
 
       {rPx > 14 && Array.from({ length: N }, (_, k) => {
-        const a = (2 * Math.PI * (k + 0.5)) / N
+        const a = (2 * Math.PI * (k + desfase)) / N
         const [x1, y1] = punto(a - delta)
         const [x2, y2] = punto(a + delta)
         // sweep = 0 → antihorario en pantalla
         return (
           <path key={k} d={`M${x1},${y1} A${rPx},${rPx} 0 0 0 ${x2},${y2}`}
-                fill="none" stroke={COLOR_B} strokeWidth={2.4}
+                fill="none" stroke={COLOR_B} strokeWidth={grosor}
                 markerEnd="url(#cj-flecha-b)" />
         )
       })}
 
       {/* Radio del camino */}
-      <line x1={CX} y1={CY} x2={lx} y2={ly} stroke={COLOR_B} strokeWidth={1} strokeDasharray="3 3" />
-      <text x={lx - 6} y={ly - 6} textAnchor="end" fontSize={13} fontStyle="italic"
-            fontWeight="bold" fill={COLOR_B}>{label}</text>
+      <line x1={CX} y1={CY} x2={rx} y2={ry} stroke={COLOR_B} strokeWidth={1} strokeDasharray="3 3" />
+
+      {/* Líneas guía hasta las etiquetas (solo si el camino está adentro del cable) */}
+      {adentro && (
+        <>
+          <line x1={rx} y1={ry} x2={rlx} y2={rly} stroke={COLOR_B} strokeWidth={0.8} />
+          {rPx > 14 && <line x1={bx} y1={by} x2={blx} y2={bly} stroke={COLOR_B} strokeWidth={0.8} />}
+        </>
+      )}
+
+      <text x={rlx - 4} y={rly - 4} textAnchor="end" fontSize={13} fontStyle="italic"
+            fontWeight="bold" fill={COLOR_B} stroke="#fff" strokeWidth={3} paintOrder="stroke">{label}</text>
 
       {rPx > 14 && (
-        <text x={CX + rPx * Math.cos(Math.PI / 4) + 8} y={CY - rPx * Math.sin(Math.PI / 4) - 4}
-              fontSize={13} fontWeight="bold" fill={COLOR_B}>B</text>
+        <text x={blx + 4} y={bly - 4} fontSize={13} fontWeight="bold" fill={COLOR_B}
+              stroke="#fff" strokeWidth={3} paintOrder="stroke">B</text>
       )}
     </g>
   )

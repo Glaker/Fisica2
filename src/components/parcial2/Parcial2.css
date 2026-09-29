@@ -202,3 +202,26 @@
 .p2-lectura--color {
   border-top: 3px solid;
 }
+
+.p2-tabs {
+  scroll-margin-top: 1rem;
+}
+
+/* ── Foco: solo visible al navegar con teclado ─────────────────────────────────
+   Aplica al contenido del Parcial 2 (.p2-root) y a su navegación de ejercicios
+   (.app--nav-lateral solo existe en el Parcial 2). */
+:where(.p2-root, .app--nav-lateral) :focus:not(:focus-visible) {
+  outline: none;
+}
+
+:where(.p2-root, .app--nav-lateral) :focus-visible {
+  outline: 2px solid #3949ab;
+  outline-offset: 2px;
+}
+
+/* Los gráficos de Recharts toman foco al hacer click y muestran un recuadro */
+.p2-root .recharts-wrapper:focus,
+.p2-root .recharts-surface:focus,
+.p2-root .recharts-wrapper *:focus {
+  outline: none;
+}

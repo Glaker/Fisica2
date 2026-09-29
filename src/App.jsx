@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, Fragment } from 'react'
 import './App.css'
 import FieldSuperposition from './components/FieldSuperposition'
 import CapacitorCircuit from './components/CapacitorCircuit'
@@ -7,146 +7,110 @@ import ConductoresConcentricos from './components/ConductoresConcentricos'
 import CableJ from './components/parcial2/CableJ'
 import CampoRotante from './components/parcial2/CampoRotante'
 import CircuitoRCRL from './components/parcial2/CircuitoRCRL'
+import TeoriaGeneral from './components/parcial2/TeoriaGeneral'
+import Landing from './components/Landing'
+import Header from './components/Header'
+import { interpretarRuta } from './navegacion'
+import { useRuta, navegar, RutaContext } from './router'
 
-const TABS = {
-  1: [
-    { id: 'conductores', label: 'Conductores Concéntricos', Component: ConductoresConcentricos },
-    { id: 'fields',     label: 'Superposición de Campos',  Component: FieldSuperposition },
-    { id: 'capacitors', label: 'Circuito de Capacitores',  Component: CapacitorCircuit  },
-    { id: 'flashcards', label: 'Flashcards de Repaso',     Component: Flashcards        },
-  ],
-  2: [
-    { id: 'cable',    label: '1-a) Cable con J(r)',  Component: CableJ       },
-    { id: 'rotante',  label: '1-b) Campo rotante',   Component: CampoRotante },
-    { id: 'circuito', label: '2) Circuito RC-RL',    Component: CircuitoRCRL },
-  ],
+// Componente de cada pestaña, por parcial
+const COMPONENTES = {
+  1: { conductores: ConductoresConcentricos, fields: FieldSuperposition, capacitors: CapacitorCircuit, flashcards: Flashcards },
+  2: { '1a': CableJ, '1b': CampoRotante, '2': CircuitoRCRL, teoria: TeoriaGeneral },
 }
 
-const PARCIALES = [
-  { id: 1, label: 'Parcial 1 · Electrostática' },
-  { id: 2, label: 'Parcial 2 · Electromagnetismo' },
-]
-
-const PARTICIPANTES = [
-  'Geronimo Garrote',
-  'Demarco Melina',
-  'Rasio Valentín',
-  'Anita Paez',
-  'Gomez Mattoni Melisa',
-]
-
 export default function App() {
-  const [parcial, setParcial]       = useState(2)
-  // Pestaña activa de cada parcial (se recuerda al cambiar de parcial)
-  const [activeTabs, setActiveTabs] = useState({ 1: 'conductores', 2: 'cable' })
-  const activeTab                   = activeTabs[parcial]
-  const setActiveTab = id => setActiveTabs(prev => ({ ...prev, [parcial]: id }))
-  const [menuOpen, setMenuOpen]     = useState(false)
-  const menuRef                     = useRef(null)
+  const ruta = useRuta()
+  const info = interpretarRuta(ruta)
+  // Última ruta visitada de cada parcial, para volver ahí desde el selector
+  const ultimaRuta = useRef({})
 
-  // Close dropdown when clicking outside
+  // Rutas incompletas o inválidas → forma canónica (sin agregar historial)
   useEffect(() => {
-    if (!menuOpen) return
-    function onPointerDown(e) {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setMenuOpen(false)
-      }
-    }
-    document.addEventListener('pointerdown', onPointerDown)
-    return () => document.removeEventListener('pointerdown', onPointerDown)
-  }, [menuOpen])
+    if (info.canonica !== ruta) navegar(info.canonica, { reemplazar: true })
+  }, [ruta, info.canonica])
 
-  const { Component } = TABS[parcial].find(t => t.id === activeTab)
+  useEffect(() => {
+    if (info.parcial) ultimaRuta.current[info.parcial.id] = info.canonica
+  }, [info.parcial, info.canonica])
+
+  // Al cambiar de página (no de paso ni de pestaña interna), volver arriba
+  const pagina = info.landing ? 'landing' : `${info.parcial.id}/${info.tab.id}`
+  useEffect(() => { window.scrollTo(0, 0) }, [pagina])
+
+  useEffect(() => {
+    document.title = info.landing
+      ? 'Física II — Grupo 3'
+      : `${info.tab.label} · ${info.parcial.corto} — Física II`
+  }, [info.landing, info.tab, info.parcial])
+
+  const irAParcial = p => navegar(ultimaRuta.current[p.id] ?? `/${p.slug}`)
 
   return (
     <>
-      <header className="app-header">
-        {/* Decorative field lines — purely visual, aria-hidden */}
-        <svg className="app-header-deco" aria-hidden="true"
-             viewBox="0 0 600 80" xmlns="http://www.w3.org/2000/svg">
-          <g stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round">
-            <line x1="592" y1="40" x2="-10" y2="40"  opacity="0.07"/>
-            <line x1="592" y1="40" x2="-10" y2="11"  opacity="0.065"/>
-            <line x1="592" y1="40" x2="-10" y2="69"  opacity="0.065"/>
-            <line x1="592" y1="40" x2="75"  y2="-4"  opacity="0.06"/>
-            <line x1="592" y1="40" x2="75"  y2="84"  opacity="0.06"/>
-            <line x1="592" y1="40" x2="220" y2="-4"  opacity="0.055"/>
-            <line x1="592" y1="40" x2="220" y2="84"  opacity="0.055"/>
-            <line x1="592" y1="40" x2="390" y2="-4"  opacity="0.045"/>
-            <line x1="592" y1="40" x2="390" y2="84"  opacity="0.045"/>
-            <circle cx="592" cy="40" r="4"   fill="white" opacity="0.13"/>
-            <circle cx="592" cy="40" r="9"   strokeWidth="0.9" opacity="0.07"/>
-            <circle cx="592" cy="40" r="16"  strokeWidth="0.7" opacity="0.04"/>
-          </g>
-        </svg>
-        <div className="app-header-inner">
-        <div className="header-left">
-          <h1>Física II — Grupo 3</h1>
+      <Header parcialActivo={info.parcial?.id ?? null} onParcial={irAParcial} />
 
-          {/* Participantes dropdown — next to title */}
-          <div className="part-wrap" ref={menuRef}>
-            <button
-              className="parcial-pill parcial-pill--participants"
-              onClick={() => setMenuOpen(o => !o)}
-              aria-expanded={menuOpen}
-            >
-              Participantes
-            </button>
-            {menuOpen && (
-              <div className="part-menu">
-                <div className="part-menu-header">
-                  <span>Integrantes del grupo</span>
-                  <button className="part-close" onClick={() => setMenuOpen(false)} aria-label="Cerrar">✕</button>
-                </div>
-                <ul className="part-list">
-                  {PARTICIPANTES.map(name => (
-                    <li key={name}>{name}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
+      {info.landing ? (
+        <Landing />
+      ) : (
+        <Pagina info={info} />
+      )}
+    </>
+  )
+}
 
-        <div className="header-controls">
+function Pagina({ info }) {
+  const { parcial, tab } = info
+  const Component = COMPONENTES[parcial.id][tab.id]
 
-          {PARCIALES.map(({ id, label, disabled }) =>
-            disabled ? (
-              <div key={id} className="parcial-pill parcial-pill--disabled" title="Disponible próximamente">
-                {label}
-                <span className="parcial-soon">Próximamente</span>
-              </div>
-            ) : (
+  return (
+    <>
+      <Migas info={info} />
+      <div className={`app${parcial.id === 2 ? ' app--nav-lateral' : ''}`}>
+        <nav className="tab-bar">
+          {parcial.tabs.map(({ id, label, separado }) => (
+            <Fragment key={id}>
+              {separado && <span className="tab-sep" aria-hidden="true" />}
               <button
-                key={id}
-                className={`parcial-pill${parcial === id ? ' parcial-pill--active' : ''}`}
-                onClick={() => setParcial(id)}
+                className={`tab-btn${tab.id === id ? ' active' : ''}`}
+                onClick={() => { if (tab.id !== id) navegar(`/${parcial.slug}/${id}`) }}
+                aria-current={tab.id === id ? 'page' : undefined}
               >
                 {label}
               </button>
-            )
-          )}
-        </div>
-        </div>{/* end app-header-inner */}
-      </header>
+            </Fragment>
+          ))}
+        </nav>
 
-      <div className={`app${parcial === 2 ? ' app--nav-lateral' : ''}`}>
-      <nav className="tab-bar">
-        {TABS[parcial].map(({ id, label }) => (
-          <button
-            key={id}
-            className={`tab-btn${activeTab === id ? ' active' : ''}`}
-            onClick={() => setActiveTab(id)}
-          >
-            {label}
-          </button>
-        ))}
-      </nav>
-
-      <main className="tab-content">
-        <Component />
-      </main>
+        <main className="tab-content">
+          <RutaContext.Provider value={info}>
+            <Component />
+          </RutaContext.Provider>
+        </main>
       </div>
     </>
+  )
+}
+
+// Inicio / Parcial 2 / 1-b) Campo rotante / Resolución
+function Migas({ info }) {
+  const { parcial, tab, seccion, simulacro } = info
+  const partes = [
+    { label: 'Inicio', ruta: '/' },
+    { label: parcial.corto, ruta: `/${parcial.slug}` },
+    { label: tab.label, ruta: `/${parcial.slug}/${tab.id}` },
+  ]
+  if (seccion) partes.push({ label: seccion.label, ruta: `/${parcial.slug}/${tab.id}/${seccion.id}` })
+  if (simulacro) partes.push({ label: 'Simulacro', ruta: `/${parcial.slug}/${tab.id}/simulacro` })
+
+  return (
+    <nav className="migas" aria-label="Ubicación">
+      {partes.map((p, i) => (
+        <Fragment key={p.ruta}>
+          {i > 0 && <span className="migas-sep" aria-hidden="true">/</span>}
+          <a href={`#${p.ruta}`} aria-current={i === partes.length - 1 ? 'page' : undefined}>{p.label}</a>
+        </Fragment>
+      ))}
+    </nav>
   )
 }

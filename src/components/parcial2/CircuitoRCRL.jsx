@@ -2,6 +2,7 @@ import EjercicioLayout from './EjercicioLayout'
 import CircuitoEnunciado from './circuito/CircuitoEnunciado'
 import CircuitoVisual from './circuito/CircuitoVisual'
 import './circuito/Circuito.css'
+import * as teoria from './teoria/teoria2'
 
 // Pasos de la resolución (ver formato en StepperResolucion.jsx).
 // El Visual espera 7 pasos (índices 0 a 6).
@@ -185,6 +186,7 @@ export default function CircuitoRCRL() {
       enunciado={<CircuitoEnunciado />}
       pasos={PASOS}
       Visual={CircuitoVisual}
+      teoria={{ secciones: teoria.SECCIONES, preguntas: teoria.PREGUNTAS }}
     />
   )
 }

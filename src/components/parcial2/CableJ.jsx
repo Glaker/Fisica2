@@ -2,6 +2,7 @@ import EjercicioLayout from './EjercicioLayout'
 import CableJEnunciado from './cableJ/CableJEnunciado'
 import CableJVisual from './cableJ/CableJVisual'
 import './cableJ/CableJ.css'
+import * as teoria from './teoria/teoria1a'
 
 // Pasos de la resolución (ver formato en StepperResolucion.jsx).
 // El Visual espera 6 pasos (índices 0 a 5).
@@ -113,7 +114,7 @@ const PASOS = [
   // ── 5 ──────────────────────────────────────────────────────────────────────
   {
     titulo: 'a2: la constante c',
-    texto: 'La corriente total es la integral de $J$ sobre toda la sección (paso 3). Despejamos $c$ y reemplazamos los datos: $i = 2{,}5$ A y $R = 5$ mm $= 5\\times10^{-3}$ m. Hay que pasar a metros antes de elevar a la cuarta.'
+    texto: 'La corriente total es la integral de $J$ sobre toda la sección (paso 4). Despejamos $c$ y reemplazamos los datos: $i = 2{,}5$ A y $R = 5$ mm $= 5\\times10^{-3}$ m. Hay que pasar a metros antes de elevar a la cuarta.'
       + '\n\nDato para la defensa: en el borde, $J$ es el doble del promedio. La corriente está concentrada hacia afuera.',
     formula: [
       'c = \\frac{2\\,i}{\\pi R^4}',
@@ -138,6 +139,7 @@ export default function CableJ() {
       enunciado={<CableJEnunciado />}
       pasos={PASOS}
       Visual={CableJVisual}
+      teoria={{ secciones: teoria.SECCIONES, preguntas: teoria.PREGUNTAS }}
     />
   )
 }

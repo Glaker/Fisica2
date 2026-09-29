@@ -1,34 +1,55 @@
-import { useState } from 'react'
+import { useContext, useRef } from 'react'
 import StepperResolucion from '../StepperResolucion'
+import TeoriaApunte from './teoria/TeoriaApunte'
+import { SECCIONES_EJERCICIO } from '../../navegacion'
+import { RutaContext, navegar } from '../../router'
 import './Parcial2.css'
-
-const SECCIONES = [
-  { id: 'enunciado',  label: 'Enunciado' },
-  { id: 'resolucion', label: 'Resolución' },
-  { id: 'teoria',     label: 'Teoría y preguntas' },
-]
 
 /*
  * Estructura común de cada ejercicio del Parcial 2.
- *   enunciado / teoria — JSX (si falta, se muestra "En construcción")
- *   pasos + Visual     — datos para StepperResolucion (si pasos está vacío, "En construcción")
+ *   enunciado      — JSX (si falta, se muestra "En construcción")
+ *   pasos + Visual — datos para StepperResolucion (si pasos está vacío, "En construcción")
+ *   teoria         — { secciones, preguntas } para TeoriaApunte
+ *
+ * La pestaña interna y el paso de la resolución salen de la URL
+ * (#/parcial2/<ejercicio>/<pestaña>/<paso>), vía RutaContext.
  */
 export default function EjercicioLayout({ titulo, subtitulo, enunciado, pasos = [], Visual, teoria }) {
-  const [seccion, setSeccion] = useState('enunciado')
+  const ruta = useContext(RutaContext)
+  const seccion = ruta?.seccion?.id ?? 'enunciado'
+  const pasoInicial = ruta?.paso ? ruta.paso - 1 : 0
+  const tabsRef = useRef(null)
+
+  // Click en la pestaña que ya está activa: no hacer nada (la URL y el paso del stepper no cambian)
+  const irASeccion = id => {
+    if (id !== seccion) navegar(`${ruta.base}/${id}`)
+  }
+
+  // Desde la teoría: abrir la Resolución en el paso indicado (1-based) y subir hasta las pestañas
+  const verPaso = paso => {
+    navegar(`${ruta.base}/resolucion/${paso}`)
+    requestAnimationFrame(() => {
+      const el = tabsRef.current
+      if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
+  }
+
+  // Al avanzar pasos se actualiza la URL sin agregar historial (recargar mantiene el paso)
+  const alCambiarPaso = i => navegar(`${ruta.base}/resolucion/${i + 1}`, { reemplazar: true })
 
   return (
     <div className="p2-root">
       <h2>{titulo}</h2>
       {subtitulo && <p className="cc2-subtitle">{subtitulo}</p>}
 
-      <div className="p2-tabs" role="tablist">
-        {SECCIONES.map(({ id, label }) => (
+      <div className="p2-tabs" role="tablist" ref={tabsRef}>
+        {SECCIONES_EJERCICIO.map(({ id, label }) => (
           <button
             key={id}
             role="tab"
             aria-selected={seccion === id}
             className={`p2-tab${seccion === id ? ' p2-tab--active' : ''}`}
-            onClick={() => setSeccion(id)}
+            onClick={() => irASeccion(id)}
           >
             {label}
           </button>
@@ -38,9 +59,18 @@ export default function EjercicioLayout({ titulo, subtitulo, enunciado, pasos = 
       <div className="p2-panel" role="tabpanel">
         {seccion === 'enunciado' && (enunciado ?? <EnConstruccion />)}
         {seccion === 'resolucion' && (
-          pasos.length > 0 ? <StepperResolucion pasos={pasos} Visual={Visual} /> : <EnConstruccion />
+          pasos.length > 0
+            ? <StepperResolucion pasos={pasos} Visual={Visual}
+                                 pasoInicial={pasoInicial} onPasoChange={alCambiarPaso} />
+            : <EnConstruccion />
         )}
-        {seccion === 'teoria' && (teoria ?? <EnConstruccion />)}
+        {seccion === 'teoria' && (
+          <TeoriaApunte
+            secciones={teoria?.secciones ?? []}
+            preguntas={teoria?.preguntas ?? []}
+            onVerPaso={pasos.length > 0 ? verPaso : undefined}
+          />
+        )}
       </div>
     </div>
   )
