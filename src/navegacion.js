@@ -30,9 +30,9 @@ export const PARCIALES = [
     corto: 'Parcial 2',
     cubre: 'Ampère, Faraday-Lenz, circuitos RC y RL',
     tabs: [
-      { id: '1a',     label: '1-a) Cable con J(r)',  ejercicio: true, desc: 'Ampère con corriente no uniforme' },
-      { id: '1b',     label: '1-b) Campo rotante',   ejercicio: true, desc: 'Faraday-Lenz y corrientes desfasadas' },
-      { id: '2',      label: '2) Circuito RC-RL',    ejercicio: true, desc: 'transitorios, carga y descarga' },
+      { id: '1a',     label: '1-a) Cable con J(r)',  ejercicio: true, origen: '1-a', desc: 'Ampère con corriente no uniforme' },
+      { id: '1b',     label: '1-b) Campo rotante',   ejercicio: true, origen: '1-b', desc: 'Faraday-Lenz y corrientes desfasadas' },
+      { id: '2',      label: '2) Circuito RC-RL',    ejercicio: true, origen: '2', desc: 'transitorios, carga y descarga' },
       { id: 'teoria', label: 'Teoría general',       separado: true,  desc: 'Maxwell, Lorentz, dipolo, materia' },
     ],
   },
@@ -50,10 +50,22 @@ export const SECCIONES_EJERCICIO = [
 
 export const RUTA_SIMULACRO = '/parcial2/teoria/simulacro'
 
+// Vistas de las preguntas de una teoría: lista, configuración del simulacro y simulacro en curso.
+// Cuelgan de la ruta de la teoría: .../teoria, .../teoria/simulacro, .../teoria/simulacro/curso
+const SUFIJOS_VISTA = { lista: '', config: '/simulacro', curso: '/simulacro/curso' }
+
+export const rutaPreguntas = (rutaTeoria, vista) => rutaTeoria + SUFIJOS_VISTA[vista]
+
+function vistaPreguntas(partes) {
+  if (partes[0] !== 'simulacro') return 'lista'
+  return partes[1] === 'curso' ? 'curso' : 'config'
+}
+
 /*
  * Interpreta una ruta y devuelve su forma canónica.
  *   { landing: true }
- *   { parcial, tab, seccion?, paso?, simulacro?, canonica }
+ *   { parcial, tab, seccion?, paso?, rutaTeoria?, vista?, simulacro?, canonica }
+ *   rutaTeoria / vista: solo en páginas con teoría ('lista' | 'config' | 'curso')
  * Las rutas incompletas o inválidas se completan con la primera opción válida.
  */
 export function interpretarRuta(ruta) {
@@ -65,11 +77,23 @@ export function interpretarRuta(ruta) {
   const base = `/${parcial.slug}/${tab.id}`
 
   if (!tab.ejercicio) {
-    const simulacro = tab.id === 'teoria' && partes[2] === 'simulacro'
-    return { parcial, tab, simulacro, canonica: simulacro ? `${base}/simulacro` : base }
+    if (tab.id !== 'teoria') return { parcial, tab, canonica: base }
+    const vista = vistaPreguntas(partes.slice(2))
+    return {
+      parcial, tab, rutaTeoria: base, vista, simulacro: vista !== 'lista',
+      canonica: rutaPreguntas(base, vista),
+    }
   }
 
   const seccion = SECCIONES_EJERCICIO.find(s => s.id === partes[2]) ?? SECCIONES_EJERCICIO[0]
+  if (seccion.id === 'teoria') {
+    const rutaTeoria = `${base}/teoria`
+    const vista = vistaPreguntas(partes.slice(3))
+    return {
+      parcial, tab, seccion, base, rutaTeoria, vista, simulacro: vista !== 'lista',
+      canonica: rutaPreguntas(rutaTeoria, vista),
+    }
+  }
   const paso = seccion.id === 'resolucion' && /^\d+$/.test(partes[3] ?? '') ? Number(partes[3]) : null
   return {
     parcial, tab, seccion, paso, base,

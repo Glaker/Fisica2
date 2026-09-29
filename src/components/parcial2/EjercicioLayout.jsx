@@ -1,7 +1,7 @@
-import { useContext, useRef } from 'react'
+import { useContext, useMemo, useRef } from 'react'
 import StepperResolucion from '../StepperResolucion'
 import TeoriaApunte from './teoria/TeoriaApunte'
-import { SECCIONES_EJERCICIO } from '../../navegacion'
+import { SECCIONES_EJERCICIO, rutaPreguntas } from '../../navegacion'
 import { RutaContext, navegar } from '../../router'
 import './Parcial2.css'
 
@@ -11,8 +11,9 @@ import './Parcial2.css'
  *   pasos + Visual — datos para StepperResolucion (si pasos está vacío, "En construcción")
  *   teoria         — { secciones, preguntas } para TeoriaApunte
  *
- * La pestaña interna y el paso de la resolución salen de la URL
- * (#/parcial2/<ejercicio>/<pestaña>/<paso>), vía RutaContext.
+ * La pestaña interna, el paso de la resolución y la vista de las preguntas salen de la URL
+ * (#/parcial2/<ejercicio>/<pestaña>/<paso>, #/parcial2/<ejercicio>/teoria/simulacro/curso),
+ * vía RutaContext.
  */
 export default function EjercicioLayout({ titulo, subtitulo, enunciado, pasos = [], Visual, teoria }) {
   const ruta = useContext(RutaContext)
@@ -33,6 +34,14 @@ export default function EjercicioLayout({ titulo, subtitulo, enunciado, pasos = 
       if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
     })
   }
+
+  // Preguntas de la teoría con el ejercicio de origen (para el simulacro y el tema)
+  const origen = ruta?.tab?.origen
+  const preguntas = useMemo(
+    () => (teoria?.preguntas ?? []).map(p => ({ ...p, origen })),
+    [teoria?.preguntas, origen],
+  )
+  const onVista = (vista, opciones) => navegar(rutaPreguntas(ruta.rutaTeoria, vista), opciones)
 
   // Al avanzar pasos se actualiza la URL sin agregar historial (recargar mantiene el paso)
   const alCambiarPaso = i => navegar(`${ruta.base}/resolucion/${i + 1}`, { reemplazar: true })
@@ -67,8 +76,10 @@ export default function EjercicioLayout({ titulo, subtitulo, enunciado, pasos = 
         {seccion === 'teoria' && (
           <TeoriaApunte
             secciones={teoria?.secciones ?? []}
-            preguntas={teoria?.preguntas ?? []}
+            preguntas={preguntas}
             onVerPaso={pasos.length > 0 ? verPaso : undefined}
+            vista={ruta?.vista ?? 'lista'}
+            onVista={onVista}
           />
         )}
       </div>

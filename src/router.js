@@ -1,7 +1,7 @@
 import { createContext, useSyncExternalStore } from 'react'
 
 // Navegación con el hash de la URL: #/, #/parcial1/<pestaña>, #/parcial2/1b/resolucion/3,
-// #/parcial2/teoria, #/parcial2/teoria/simulacro.
+// #/parcial2/teoria, #/parcial2/teoria/simulacro, #/parcial2/1b/teoria/simulacro/curso.
 // El botón "atrás" funciona, recargar no pierde la posición y se pueden pasar links directos.
 
 const oyentes = new Set()

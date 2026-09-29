@@ -10,7 +10,7 @@ import CircuitoRCRL from './components/parcial2/CircuitoRCRL'
 import TeoriaGeneral from './components/parcial2/TeoriaGeneral'
 import Landing from './components/Landing'
 import Header from './components/Header'
-import { interpretarRuta } from './navegacion'
+import { interpretarRuta, rutaPreguntas } from './navegacion'
 import { useRuta, navegar, RutaContext } from './router'
 
 // Componente de cada pestaña, por parcial
@@ -94,14 +94,14 @@ function Pagina({ info }) {
 
 // Inicio / Parcial 2 / 1-b) Campo rotante / Resolución
 function Migas({ info }) {
-  const { parcial, tab, seccion, simulacro } = info
+  const { parcial, tab, seccion, simulacro, rutaTeoria } = info
   const partes = [
     { label: 'Inicio', ruta: '/' },
     { label: parcial.corto, ruta: `/${parcial.slug}` },
     { label: tab.label, ruta: `/${parcial.slug}/${tab.id}` },
   ]
   if (seccion) partes.push({ label: seccion.label, ruta: `/${parcial.slug}/${tab.id}/${seccion.id}` })
-  if (simulacro) partes.push({ label: 'Simulacro', ruta: `/${parcial.slug}/${tab.id}/simulacro` })
+  if (simulacro) partes.push({ label: 'Simulacro', ruta: rutaPreguntas(rutaTeoria, 'config') })
 
   return (
     <nav className="migas" aria-label="Ubicación">

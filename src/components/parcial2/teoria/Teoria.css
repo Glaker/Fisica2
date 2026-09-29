@@ -8,6 +8,13 @@
   --ap-linea: #e4e6ee;
   --ap-acento: #1a237e;
 
+  /* Estados de las preguntas: apagados, para no competir con el texto */
+  --ap-sabida: #6f9a74;
+  --ap-medias: #d4a23c;
+  --ap-no: #c0675c;
+  --ap-sinver: #eceef3;
+  --ap-sinver-borde: #c3c7d3;
+
   display: grid;
   grid-template-columns: minmax(0, 720px) 200px;
   justify-content: start;
@@ -180,30 +187,101 @@
   display: none;
 }
 
-/* ── Preguntas del profe ───────────────────────────────────────────────────── */
+/* ── Preguntas ─────────────────────────────────────────────────────────────── */
+.ap-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Colores de estado: puntos, barras y texto */
+.ap-color--sabida    { background: var(--ap-sabida); }
+.ap-color--a-medias  { background: var(--ap-medias); }
+.ap-color--no-sabida { background: var(--ap-no); }
+.ap-color--sin-ver   { background: var(--ap-sinver); }
+
+.ap-texto--sabida    { color: #4a7a50; }
+.ap-texto--a-medias  { color: #9a6a0c; }
+.ap-texto--no-sabida { color: #a24a40; }
+
+.ap-punto {
+  flex: none;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.ap-punto.ap-color--sin-ver {
+  border: 1px solid var(--ap-sinver-borde);
+}
+
+.ap-barra {
+  display: flex;
+  gap: 2px;
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--ap-sinver);
+}
+
+.ap-barra-seg {
+  flex: 1 1 0;
+  min-width: 2px;
+}
+
+.ap-resumen {
+  margin: 1rem 0 .9rem;
+}
+
+.ap-resumen-texto {
+  margin-bottom: .45rem;
+  font-size: .9rem;
+  color: var(--ap-suave);
+  font-variant-numeric: tabular-nums;
+}
+
 .ap-preguntas-barra {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   gap: .6rem 1.25rem;
-  margin: 1rem 0 .75rem;
+  margin-bottom: 1.1rem;
   font-size: .9rem;
   color: var(--ap-suave);
 }
 
-.ap-contador {
-  font-weight: 600;
-  color: var(--ap-texto);
+fieldset.ap-filtros,
+fieldset.ap-config-grupo {
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
 }
 
-.ap-filtro {
+fieldset.ap-config-grupo {
+  margin-top: 1.25rem;
+}
+
+.ap-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem 1.1rem;
+}
+
+.ap-opcion {
   display: inline-flex;
   align-items: center;
   gap: .4rem;
   cursor: pointer;
 }
 
-.ap-filtro input {
+.ap-opcion input {
+  margin: 0;
   accent-color: var(--ap-acento);
 }
 
@@ -232,13 +310,49 @@
   background: #283593;
 }
 
-.ap-lista {
-  padding-left: 1.6rem;
+.ap-boton:disabled,
+.ap-boton:disabled:hover {
+  background: #eceef3;
+  border-color: #dcdfe8;
+  color: var(--ap-tenue);
+  cursor: not-allowed;
 }
 
-.ap-lista > li::marker {
+.ap-link--suave {
+  margin-top: 0;
+  color: var(--ap-suave);
+  font-size: .85rem;
+}
+
+.ap-link--suave:hover {
+  color: var(--ap-texto);
+}
+
+.ap-atajo {
+  margin-left: .45rem;
+  font-family: inherit;
+  font-size: .72rem;
   color: var(--ap-tenue);
-  font-variant-numeric: tabular-nums;
+}
+
+/* Lista */
+.ap-lista {
+  list-style: none;
+  padding: 0;
+}
+
+.ap-item {
+  display: flex;
+  gap: .75rem;
+}
+
+.ap-item > .ap-punto {
+  /* centrado con la primera línea de la pregunta */
+  margin-top: calc(.825em - 4px);
+}
+
+.ap-item-cuerpo {
+  min-width: 0;
 }
 
 .ap-item + .ap-item {
@@ -267,13 +381,13 @@
 
 .ap-respuesta {
   margin-top: .45rem;
-  padding-left: 1.1rem;
   color: #3a3e4d;
 }
 
 .ap-marcas {
   display: flex;
-  gap: 1.1rem;
+  flex-wrap: wrap;
+  gap: .3rem 1.1rem;
   margin-top: .45rem;
 }
 
@@ -293,42 +407,333 @@
   text-underline-offset: 3px;
 }
 
-.ap-marca--sabida,
-.ap-marca--sabida:hover {
-  color: #2e7d32;
+.ap-marca--activa {
   font-weight: 700;
 }
 
-.ap-marca--repasar,
-.ap-marca--repasar:hover {
-  color: #a15c00;
-  font-weight: 700;
+.ap-marca--activa:hover {
+  color: inherit;
 }
 
-/* Simulacro */
-.ap-simulacro {
-  padding: .5rem 0 0;
+/* ── Simulacro: configuración ──────────────────────────────────────────────── */
+.ap-config,
+.ap-sim-tarjeta {
+  max-width: 640px;
+  margin: 1.25rem auto 0;
 }
 
-.ap-simulacro-progreso {
-  font-size: .82rem;
-  color: var(--ap-tenue);
+.ap-config {
+  font-size: .95rem;
 }
 
-.ap-simulacro-pregunta {
-  margin: .6rem 0 1.1rem;
-  font-size: 1.35rem;
-  line-height: 1.45;
+.ap-config-titulo {
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--ap-texto);
 }
 
-.ap-respuesta--simulacro {
-  padding-left: 0;
+.ap-config-grupo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem 1.4rem;
 }
 
-.ap-simulacro-acciones {
+.ap-config-grupo > legend {
+  width: 100%;
+  margin-bottom: .3rem;
+  padding: 0;
+}
+
+.ap-config-accion {
+  margin-top: 1.75rem;
+}
+
+.ap-config-accion .ap-boton {
+  padding: .45rem 1.4rem;
+  font-size: .95rem;
+}
+
+.ap-config-disponibles {
+  margin-top: .45rem;
+  font-size: .85rem;
+  color: var(--ap-tenue);
+}
+
+/* ── Simulacro: pregunta ───────────────────────────────────────────────────── */
+.ap-sim-tarjeta {
+  padding: 1.75rem 2.25rem 2rem;
+  border: 1px solid var(--ap-linea);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.ap-sim-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .25rem 1rem;
+  font-size: .85rem;
+}
+
+.ap-sim-numero {
+  font-weight: 600;
+  color: var(--ap-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.ap-sim-derecha {
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  color: var(--ap-tenue);
+}
+
+.ap-sim-progreso {
+  height: 2px;
+  margin-top: .6rem;
+  background: var(--ap-linea);
+}
+
+.ap-sim-progreso span {
+  display: block;
+  height: 100%;
+  background: var(--ap-acento);
+  transition: width .25s ease;
+}
+
+.tab-content h4.ap-sim-pregunta,
+.ap-sim-pregunta {
+  margin: 2rem 0 .5rem;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--ap-texto);
+}
+
+.ap-sim-pregunta:focus,
+.ap-sim-respuesta-texto:focus,
+.ap-config-titulo:focus {
+  outline: none;
+}
+
+.ap-sim-ayuda {
+  font-size: .88rem;
+  color: var(--ap-tenue);
+}
+
+.ap-sim-tiempo {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-top: 1.25rem;
+  font-size: .8rem;
+}
+
+.ap-sim-tiempo-pista {
+  flex: 1;
+  height: 2px;
+  background: var(--ap-linea);
+  overflow: hidden;
+}
+
+.ap-sim-tiempo-barra {
+  display: block;
+  height: 100%;
+  background: var(--ap-tenue);
+  transform-origin: left;
+  animation-name: ap-tiempo;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.ap-sim-tiempo-texto {
+  min-width: 3.5em;
+  text-align: right;
+  font-weight: 600;
+}
+
+.ap-sim-tiempo--agotado .ap-sim-tiempo-pista {
+  background: var(--ap-medias);
+}
+
+.ap-sim-tiempo--agotado .ap-sim-tiempo-texto {
+  color: #9a6a0c;
+}
+
+@keyframes ap-tiempo {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+.ap-sim-mostrar {
+  margin-top: 1.75rem;
+  padding: .45rem 1.1rem;
+  font-size: .95rem;
+}
+
+.ap-sim-respuesta {
   margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ap-linea);
+  animation: ap-aparecer .18s ease-out;
+}
+
+.ap-sim-respuesta-texto {
+  color: #3a3e4d;
+}
+
+@keyframes ap-aparecer {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.ap-sim-botones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .6rem;
+  margin-top: 1.75rem;
+}
+
+.ap-sim-boton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .75rem .5rem;
+  border: 1px solid #d5d8e3;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  font-size: .95rem;
+  color: var(--ap-texto);
+  cursor: pointer;
+}
+
+.ap-sim-boton:hover {
+  border-color: var(--ap-suave);
+  background: #fafbfc;
+}
+
+.ap-sim-boton .ap-atajo {
+  margin-left: .1rem;
+}
+
+/* ── Simulacro: resumen ────────────────────────────────────────────────────── */
+.ap-sim-resumen .ap-resumen-texto {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: var(--ap-texto);
+}
+
+.ap-sim-subtitulo {
+  margin-top: 1.75rem;
+  margin-bottom: .4rem;
+}
+
+.ap-temas {
+  list-style: none;
+  padding: 0;
+  font-size: .9rem;
+}
+
+.ap-tema {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) 1fr 2.5rem;
+  align-items: center;
+  gap: 1rem;
+  padding: .3rem 0;
+}
+
+.ap-tema-nombre {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ap-tema-n {
+  text-align: right;
+  color: var(--ap-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.ap-falladas {
+  list-style: none;
+  padding: 0;
+}
+
+.ap-falladas li + li {
+  margin-top: .6rem;
+}
+
+.ap-fallada summary {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+}
+
+.ap-fallada summary::-webkit-details-marker {
+  display: none;
+}
+
+.ap-fallada summary .ap-punto {
+  align-self: flex-start;
+  margin-top: calc(.825em - 4px);
+}
+
+.ap-fallada summary:hover {
+  color: var(--ap-acento);
+}
+
+.ap-fallada-texto .ap-meta {
+  display: block;
+  font-weight: 400;
+}
+
+.ap-fallada .ap-respuesta {
+  padding-left: calc(8px + .75rem);
+}
+
+.ap-sim-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem 1rem;
+  margin-top: 2rem;
+}
+
+.ap-sim-acciones .ap-boton {
+  padding: .45rem 1.1rem;
+  font-size: .92rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ap-sim-respuesta { animation: none; }
+  .ap-sim-progreso span { transition: none; }
+}
+
+@media (max-width: 560px) {
+  .ap-sim-tarjeta {
+    padding: 1.25rem 1.1rem 1.5rem;
+  }
+
+  .tab-content h4.ap-sim-pregunta,
+  .ap-sim-pregunta {
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .ap-sim-botones {
+    grid-template-columns: 1fr;
+  }
+
+  .ap-tema {
+    grid-template-columns: minmax(0, 7rem) 1fr 2.5rem;
+    gap: .75rem;
+  }
 }
 
 /* ── Pantallas angostas: el índice pasa arriba como desplegable ────────────── */

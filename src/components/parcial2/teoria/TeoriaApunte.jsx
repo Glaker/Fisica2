@@ -4,7 +4,7 @@ import Preguntas from './Preguntas'
 import './Teoria.css'
 
 /*
- * Apunte de teoría: secciones numeradas + "Preguntas del profe", con índice lateral.
+ * Apunte de teoría: secciones numeradas + "Preguntas", con índice lateral.
  *
  * secciones: [{
  *   id, titulo,
@@ -15,8 +15,8 @@ import './Teoria.css'
  * }]
  * preguntas: [{ pregunta, respuesta, tema, origen? }]
  * onVerPaso(paso): si está, muestra el link "Ver en la resolución →"
- * simulacro / onSimulacro: modo simulacro controlado (ver Preguntas). Si el apunte se abre
- *   con el simulacro activo, se baja directo hasta las preguntas.
+ * vista / onVista: vista de las preguntas controlada desde afuera (ver Preguntas). Si el apunte
+ *   se abre en el simulacro o su configuración, se baja directo hasta las preguntas.
  */
 const BLOQUES = [
   ['queDice', 'Qué dice'],
@@ -27,7 +27,7 @@ const BLOQUES = [
 const ID_PREGUNTAS = 'preguntas'
 
 export default function TeoriaApunte({
-  secciones, preguntas, onVerPaso, tituloPreguntas = 'Preguntas del profe', simulacro, onSimulacro,
+  secciones, preguntas, onVerPaso, tituloPreguntas = 'Preguntas', vista, onVista,
 }) {
   const entradas = [
     ...secciones.map((s, i) => ({ id: s.id, titulo: s.titulo, n: i + 1 })),
@@ -53,9 +53,9 @@ export default function TeoriaApunte({
     return () => window.removeEventListener('scroll', alScrollear)
   }, [claveEntradas])
 
-  // Abierto directo en modo simulacro: bajar a las preguntas (después del scroll a 0 de la página)
+  // Abierto directo en el simulacro: bajar a las preguntas (después del scroll a 0 de la página)
   useEffect(() => {
-    if (!simulacro) return
+    if (!vista || vista === 'lista') return
     const id = requestAnimationFrame(() => {
       refs.current[ID_PREGUNTAS]?.scrollIntoView({ block: 'start' })
     })
@@ -134,7 +134,7 @@ export default function TeoriaApunte({
             <h3 className="ap-titulo">
               <span className="ap-titulo-n">{secciones.length + 1}</span>{tituloPreguntas}
             </h3>
-            <Preguntas preguntas={preguntas} simulacro={simulacro} onSimulacro={onSimulacro} />
+            <Preguntas preguntas={preguntas} vista={vista} onVista={onVista} />
           </section>
         )}
       </article>

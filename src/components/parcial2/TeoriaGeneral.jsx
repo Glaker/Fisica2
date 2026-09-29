@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import TeoriaApunte from './teoria/TeoriaApunte'
 import { RutaContext, navegar } from '../../router'
-import { RUTA_SIMULACRO } from '../../navegacion'
+import { rutaPreguntas } from '../../navegacion'
 import * as general from './teoria/teoriaGeneral'
 import * as t1a from './teoria/teoria1a'
 import * as t1b from './teoria/teoria1b'
@@ -17,10 +17,10 @@ const TODAS_LAS_PREGUNTAS = [
 ]
 
 export default function TeoriaGeneral() {
-  // El modo simulacro sigue a la URL (#/parcial2/teoria/simulacro): se puede linkear y "atrás" lo cierra
+  // Lista / configuración / simulacro siguen a la URL (#/parcial2/teoria/simulacro/...):
+  // se puede linkear y "atrás" vuelve al paso anterior
   const ruta = useContext(RutaContext)
-  const simulacro = Boolean(ruta?.simulacro)
-  const onSimulacro = activo => navegar(activo ? RUTA_SIMULACRO : '/parcial2/teoria')
+  const onVista = (vista, opciones) => navegar(rutaPreguntas(ruta.rutaTeoria, vista), opciones)
 
   return (
     <div className="p2-root">
@@ -31,9 +31,8 @@ export default function TeoriaGeneral() {
       <TeoriaApunte
         secciones={general.SECCIONES}
         preguntas={TODAS_LAS_PREGUNTAS}
-        tituloPreguntas="Simulacro: todas las preguntas"
-        simulacro={simulacro}
-        onSimulacro={onSimulacro}
+        vista={ruta?.vista ?? 'lista'}
+        onVista={onVista}
       />
     </div>
   )
