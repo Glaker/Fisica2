@@ -138,7 +138,6 @@ const PASOS = [
 export default function CampoRotante() {
   return (
     <EjercicioLayout
-      titulo="Campo rotante — Ejercicio 1b"
       enunciado={<CampoRotanteEnunciado />}
       pasos={PASOS}
       Visual={CampoRotanteVisual}

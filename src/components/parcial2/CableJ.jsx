@@ -135,7 +135,6 @@ const PASOS = [
 export default function CableJ() {
   return (
     <EjercicioLayout
-      titulo="Cable con J(r) — Ejercicio 1a"
       enunciado={<CableJEnunciado />}
       pasos={PASOS}
       Visual={CableJVisual}

@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from 'react'
-import { PARCIALES, PARCIAL_PROXIMO, PARTICIPANTES } from '../navegacion'
+import { useState, useEffect, useRef, Fragment } from 'react'
+import { PARCIALES, PARCIAL_PROXIMO, PARTICIPANTES, rutaPreguntas } from '../navegacion'
 
 /*
  * Header: logo + título (link a la landing), integrantes y selector de parcial.
- *   parcialActivo — id del parcial activo (null en la landing)
+ *   info          — ruta interpretada (parcial activo y migas; landing si no hay parcial)
  *   onParcial(p)  — click en un parcial habilitado
  */
-export default function Header({ parcialActivo, onParcial }) {
+export default function Header({ info, onParcial }) {
+  const parcialActivo = info.parcial?.id ?? null
   return (
     <header className="app-header">
       <div className="app-header-inner">
@@ -17,6 +18,8 @@ export default function Header({ parcialActivo, onParcial }) {
           </a>
           <Integrantes />
         </div>
+
+        {!info.landing && <Migas info={info} />}
 
         <div className="seg" role="group" aria-label="Parcial">
           {PARCIALES.map(p => {
@@ -106,5 +109,28 @@ function IconoPersonas() {
       <circle cx="16.8" cy="9.3" r="2.6" />
       <path d="M16 14.1c.3-.1.7-.1 1-.1 2.7 0 4.6 2 4.6 4.8" />
     </svg>
+  )
+}
+
+// Inicio / Parcial 2 / 1-b) Campo rotante / Resolución
+function Migas({ info }) {
+  const { parcial, tab, seccion, simulacro, rutaTeoria } = info
+  const partes = [
+    { label: 'Inicio', ruta: '/' },
+    { label: parcial.corto, ruta: `/${parcial.slug}` },
+    { label: tab.label, ruta: `/${parcial.slug}/${tab.id}` },
+  ]
+  if (seccion) partes.push({ label: seccion.label, ruta: `/${parcial.slug}/${tab.id}/${seccion.id}` })
+  if (simulacro) partes.push({ label: 'Simulacro', ruta: rutaPreguntas(rutaTeoria, 'config') })
+
+  return (
+    <nav className="migas" aria-label="Ubicación">
+      {partes.map((p, i) => (
+        <Fragment key={p.ruta}>
+          {i > 0 && <span className="migas-sep" aria-hidden="true">/</span>}
+          <a href={`#${p.ruta}`} aria-current={i === partes.length - 1 ? 'page' : undefined}>{p.label}</a>
+        </Fragment>
+      ))}
+    </nav>
   )
 }

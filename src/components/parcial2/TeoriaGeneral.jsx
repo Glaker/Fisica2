@@ -24,7 +24,6 @@ export default function TeoriaGeneral() {
 
   return (
     <div className="p2-root">
-      <h2>Teoría general</h2>
       <p className="cc2-subtitle">
         Conceptos comunes a todo el parcial y simulacro con las preguntas de los tres ejercicios.
       </p>

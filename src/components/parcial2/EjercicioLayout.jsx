@@ -1,7 +1,7 @@
-import { useContext, useMemo, useRef } from 'react'
+import { useContext, useMemo } from 'react'
 import StepperResolucion from '../StepperResolucion'
 import TeoriaApunte from './teoria/TeoriaApunte'
-import { SECCIONES_EJERCICIO, rutaPreguntas } from '../../navegacion'
+import { rutaPreguntas } from '../../navegacion'
 import { RutaContext, navegar } from '../../router'
 import './Parcial2.css'
 
@@ -15,24 +15,15 @@ import './Parcial2.css'
  * (#/parcial2/<ejercicio>/<pestaña>/<paso>, #/parcial2/<ejercicio>/teoria/simulacro/curso),
  * vía RutaContext.
  */
-export default function EjercicioLayout({ titulo, subtitulo, enunciado, pasos = [], Visual, teoria }) {
+export default function EjercicioLayout({ subtitulo, enunciado, pasos = [], Visual, teoria }) {
   const ruta = useContext(RutaContext)
   const seccion = ruta?.seccion?.id ?? 'enunciado'
   const pasoInicial = ruta?.paso ? ruta.paso - 1 : 0
-  const tabsRef = useRef(null)
 
-  // Click en la pestaña que ya está activa: no hacer nada (la URL y el paso del stepper no cambian)
-  const irASeccion = id => {
-    if (id !== seccion) navegar(`${ruta.base}/${id}`)
-  }
-
-  // Desde la teoría: abrir la Resolución en el paso indicado (1-based) y subir hasta las pestañas
+  // Desde la teoría: abrir la Resolución en el paso indicado (1-based) y subir al inicio
   const verPaso = paso => {
     navegar(`${ruta.base}/resolucion/${paso}`)
-    requestAnimationFrame(() => {
-      const el = tabsRef.current
-      if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   // Preguntas de la teoría con el ejercicio de origen (para el simulacro y el tema)
@@ -48,22 +39,7 @@ export default function EjercicioLayout({ titulo, subtitulo, enunciado, pasos = 
 
   return (
     <div className="p2-root">
-      <h2>{titulo}</h2>
       {subtitulo && <p className="cc2-subtitle">{subtitulo}</p>}
-
-      <div className="p2-tabs" role="tablist" ref={tabsRef}>
-        {SECCIONES_EJERCICIO.map(({ id, label }) => (
-          <button
-            key={id}
-            role="tab"
-            aria-selected={seccion === id}
-            className={`p2-tab${seccion === id ? ' p2-tab--active' : ''}`}
-            onClick={() => irASeccion(id)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
 
       <div className="p2-panel" role="tabpanel">
         {seccion === 'enunciado' && (enunciado ?? <EnConstruccion />)}

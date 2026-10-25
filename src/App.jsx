@@ -10,7 +10,7 @@ import CircuitoRCRL from './components/parcial2/CircuitoRCRL'
 import TeoriaGeneral from './components/parcial2/TeoriaGeneral'
 import Landing from './components/Landing'
 import Header from './components/Header'
-import { interpretarRuta, rutaPreguntas } from './navegacion'
+import { interpretarRuta, SECCIONES_EJERCICIO } from './navegacion'
 import { useRuta, navegar, RutaContext } from './router'
 
 // Componente de cada pestaña, por parcial
@@ -48,7 +48,7 @@ export default function App() {
 
   return (
     <>
-      <Header parcialActivo={info.parcial?.id ?? null} onParcial={irAParcial} />
+      <Header info={info} onParcial={irAParcial} />
 
       {info.landing ? (
         <Landing />
@@ -65,7 +65,6 @@ function Pagina({ info }) {
 
   return (
     <>
-      <Migas info={info} />
       <div className={`app${parcial.id === 2 ? ' app--nav-lateral' : ''}`}>
         <nav className="tab-bar">
           {parcial.tabs.map(({ id, label, separado }) => (
@@ -78,6 +77,20 @@ function Pagina({ info }) {
               >
                 {label}
               </button>
+              {parcial.id === 2 && tab.id === id && info.seccion && (
+                <div className="sub-nav" role="group" aria-label="Sección del ejercicio">
+                  {SECCIONES_EJERCICIO.map(s => (
+                    <button
+                      key={s.id}
+                      className={`sub-btn${info.seccion.id === s.id ? ' active' : ''}`}
+                      onClick={() => { if (info.seccion.id !== s.id) navegar(`${info.base}/${s.id}`) }}
+                      aria-current={info.seccion.id === s.id ? 'page' : undefined}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </Fragment>
           ))}
         </nav>
@@ -89,28 +102,5 @@ function Pagina({ info }) {
         </main>
       </div>
     </>
-  )
-}
-
-// Inicio / Parcial 2 / 1-b) Campo rotante / Resolución
-function Migas({ info }) {
-  const { parcial, tab, seccion, simulacro, rutaTeoria } = info
-  const partes = [
-    { label: 'Inicio', ruta: '/' },
-    { label: parcial.corto, ruta: `/${parcial.slug}` },
-    { label: tab.label, ruta: `/${parcial.slug}/${tab.id}` },
-  ]
-  if (seccion) partes.push({ label: seccion.label, ruta: `/${parcial.slug}/${tab.id}/${seccion.id}` })
-  if (simulacro) partes.push({ label: 'Simulacro', ruta: rutaPreguntas(rutaTeoria, 'config') })
-
-  return (
-    <nav className="migas" aria-label="Ubicación">
-      {partes.map((p, i) => (
-        <Fragment key={p.ruta}>
-          {i > 0 && <span className="migas-sep" aria-hidden="true">/</span>}
-          <a href={`#${p.ruta}`} aria-current={i === partes.length - 1 ? 'page' : undefined}>{p.label}</a>
-        </Fragment>
-      ))}
-    </nav>
   )
 }

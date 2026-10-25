@@ -9,13 +9,11 @@
 .app-header {
   background: #1a237e;
   color: #fff;
-  padding: .55rem 1.5rem;
+  padding: .55rem 1rem;
   box-shadow: 0 2px 10px rgba(26,35,126,.18);
 }
 
 .app-header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -148,14 +146,13 @@
   outline-offset: -3px;
 }
 
-/* Migas de pan, debajo del header */
+/* Migas de pan, dentro del header */
 .migas {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: .7rem 1rem 0;
-  font-size: .8rem;
-  color: #8a8f9e;
+  flex: 1;
+  min-width: 0;
+  padding-left: 1rem;
+  font-size: .85rem;
+  color: rgba(255,255,255,.45);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -163,37 +160,24 @@
 }
 
 .migas a {
-  color: #6b7080;
+  color: rgba(255,255,255,.75);
   text-decoration: none;
 }
 
 .migas a:hover {
+  color: #fff;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
 
 .migas a[aria-current="page"] {
-  color: #3a3e4d;
+  color: #fff;
   font-weight: 600;
 }
 
 .migas-sep {
-  color: #b8bccb;
-}
-
-.migas a:focus:not(:focus-visible) {
-  outline: none;
-}
-
-.migas a:focus-visible {
-  outline: 2px solid #3949ab;
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-.migas + .app {
-  padding-top: .75rem;
+  color: rgba(255,255,255,.35);
 }
 
 /* Participantes dropdown */
@@ -293,24 +277,58 @@
   margin-bottom: 1rem;
 }
 
-/* Parcial 2 en pantallas anchas: subpestañas en columna fija en el margen izquierdo,
-   afuera de la tarjeta. El margen negativo anula el ancho de la columna en el flex,
-   así la tarjeta conserva su ancho y posición. */
-@media (min-width: 1500px) {
+/* Sub-botones (Enunciado / Resolución / Teoría) bajo el ejercicio activo */
+.sub-nav {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  margin: -.1rem 0 .3rem .9rem;
+  padding-left: .6rem;
+  border-left: 2px solid #c5cae9;
+}
+
+.sub-btn {
+  padding: .35rem .7rem;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: #5c6bc0;
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sub-btn:hover {
+  background: #ede9fe;
+  color: #1a237e;
+}
+
+.sub-btn.active,
+.sub-btn.active:hover {
+  background: #e8eaf6;
+  color: #1a237e;
+}
+
+/* Parcial 2 en pantallas medianas y grandes: navegación en columna pegada al borde izquierdo,
+   contenido a la derecha ocupando el resto del ancho. */
+@media (min-width: 900px) {
   .app--nav-lateral {
-    --nav-lateral-gap: 1rem;
-    /* Ancho disponible en el margen: mitad del sobrante de 1200px, menos un respiro */
-    --nav-lateral-w: min(210px, calc((100vw - 1200px) / 2 - 1.5rem));
+    max-width: none;
+    margin: 0;
+    padding: 1rem 1.25rem 2rem 1rem;
     display: flex;
     align-items: flex-start;
+    gap: 1.25rem;
   }
 
   .app--nav-lateral > .tab-bar {
     position: sticky;
     top: 1rem;
-    flex: 0 0 var(--nav-lateral-w);
-    width: var(--nav-lateral-w);
-    margin: 0 var(--nav-lateral-gap) 0 calc(-1 * (var(--nav-lateral-w) + var(--nav-lateral-gap)));
+    flex: 0 0 230px;
+    width: 230px;
+    margin: 0;
     flex-direction: column;
     flex-wrap: nowrap;
   }
@@ -331,5 +349,6 @@
   .app--nav-lateral > .tab-content {
     flex: 1;
     min-width: 0;
+    max-width: 1400px;
   }
 }

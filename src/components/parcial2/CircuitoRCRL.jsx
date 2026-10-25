@@ -182,7 +182,6 @@ const PASOS = [
 export default function CircuitoRCRL() {
   return (
     <EjercicioLayout
-      titulo="Circuito RC-RL — Ejercicio 2"
       enunciado={<CircuitoEnunciado />}
       pasos={PASOS}
       Visual={CircuitoVisual}
