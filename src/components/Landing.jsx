@@ -17,7 +17,7 @@ export default function Landing() {
       <main className="landing">
         <header className="landing-encabezado">
           <h1 className="landing-titulo">Física II</h1>
-          <p className="landing-datos">Grupo 3 · Comisión I22 · UTN FRLP · 2026</p>
+          <p className="landing-datos">Grupo 3 · Comisión 69 · UTN FRLP · 2026</p>
           <p className="landing-integrantes">{PARTICIPANTES.join(' · ')}</p>
         </header>
 
@@ -30,7 +30,7 @@ export default function Landing() {
           </section>
         </div>
 
-        <footer className="landing-pie">Defensa del Parcial 2: 30/09/2026</footer>
+        <footer className="landing-pie">Defensa del Parcial 2: 28/10/2026</footer>
       </main>
     </div>
   )
