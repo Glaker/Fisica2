@@ -1,13 +1,11 @@
-import { useState, useEffect, useRef, Fragment } from 'react'
-import { PARCIALES, PARCIAL_PROXIMO, PARTICIPANTES, rutaPreguntas } from '../navegacion'
+import { useState, useEffect, useRef } from 'react'
+import { PARTICIPANTES } from '../navegacion'
 
 /*
- * Header: logo + título (link a la landing), integrantes y selector de parcial.
- *   info          — ruta interpretada (parcial activo y migas; landing si no hay parcial)
- *   onParcial(p)  — click en un parcial habilitado
+ * Header: logo + título (link a la landing), integrantes y, en un parcial, su nombre y el botón de volver.
+ *   info — ruta interpretada (info.parcial es el parcial activo; landing si no hay)
  */
-export default function Header({ info, onParcial }) {
-  const parcialActivo = info.parcial?.id ?? null
+export default function Header({ info }) {
   return (
     <header className="app-header">
       <div className="app-header-inner">
@@ -19,23 +17,18 @@ export default function Header({ info, onParcial }) {
           <Integrantes />
         </div>
 
-        {!info.landing && <Migas info={info} />}
-
-        <div className="seg" role="group" aria-label="Parcial">
-          {PARCIALES.map(p => {
-            const activo = parcialActivo === p.id
-            return (
-              <button key={p.id} className={`seg-btn${activo ? ' seg-btn--activo' : ''}`}
-                      onClick={() => onParcial(p)} aria-pressed={activo}>
-                {p.label}
-              </button>
-            )
-          })}
-          <span className="seg-btn seg-btn--deshabilitado" title="Próximamente" aria-disabled="true">
-            {PARCIAL_PROXIMO.label}
-            <small className="seg-proximamente">próximamente</small>
-          </span>
-        </div>
+        {info.parcial && (
+          <div className="header-parcial">
+            <span className="header-parcial-nombre">{info.parcial.label}</span>
+            <a href="#/" className="header-volver">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
+                   strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M15 5l-7 7 7 7" />
+              </svg>
+              Volver al inicio
+            </a>
+          </div>
+        )}
       </div>
     </header>
   )
@@ -109,28 +102,5 @@ function IconoPersonas() {
       <circle cx="16.8" cy="9.3" r="2.6" />
       <path d="M16 14.1c.3-.1.7-.1 1-.1 2.7 0 4.6 2 4.6 4.8" />
     </svg>
-  )
-}
-
-// Inicio / Parcial 2 / 1-b) Campo rotante / Resolución
-function Migas({ info }) {
-  const { parcial, tab, seccion, simulacro, rutaTeoria } = info
-  const partes = [
-    { label: 'Inicio', ruta: '/' },
-    { label: parcial.corto, ruta: `/${parcial.slug}` },
-    { label: tab.label, ruta: `/${parcial.slug}/${tab.id}` },
-  ]
-  if (seccion) partes.push({ label: seccion.label, ruta: `/${parcial.slug}/${tab.id}/${seccion.id}` })
-  if (simulacro) partes.push({ label: 'Simulacro', ruta: rutaPreguntas(rutaTeoria, 'config') })
-
-  return (
-    <nav className="migas" aria-label="Ubicación">
-      {partes.map((p, i) => (
-        <Fragment key={p.ruta}>
-          {i > 0 && <span className="migas-sep" aria-hidden="true">/</span>}
-          <a href={`#${p.ruta}`} aria-current={i === partes.length - 1 ? 'page' : undefined}>{p.label}</a>
-        </Fragment>
-      ))}
-    </nav>
   )
 }

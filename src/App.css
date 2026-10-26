@@ -81,55 +81,43 @@
   height: 18px;
 }
 
-/* Selector segmentado de parcial: dos opciones pegadas dentro de un mismo borde */
-.seg {
-  display: inline-flex;
-  border: 1.5px solid rgba(255,255,255,.55);
-  border-radius: 8px;
-  overflow: hidden;
+/* Parcial activo + botón de volver, a la derecha del header */
+.header-parcial {
+  display: flex;
+  align-items: center;
+  gap: .9rem;
+  margin-left: auto;
 }
 
-.seg-btn {
-  padding: .32rem .95rem;
-  border: none;
-  background: transparent;
+.header-parcial-nombre {
+  font-size: .9rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.85);
+}
+
+.header-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .32rem .8rem .32rem .55rem;
+  border: 1.5px solid rgba(255,255,255,.55);
+  border-radius: 8px;
   color: #fff;
-  font: inherit;
   font-size: .85rem;
   font-weight: 600;
-  line-height: 1.2;
+  text-decoration: none;
   white-space: nowrap;
-  cursor: pointer;
   transition: background .15s, color .15s;
 }
 
-.seg-btn + .seg-btn {
-  border-left: 1.5px solid rgba(255,255,255,.55);
+.header-volver svg {
+  width: 16px;
+  height: 16px;
 }
 
-.seg-btn:hover {
-  background: rgba(255,255,255,.14);
-}
-
-.seg-btn--activo,
-.seg-btn--activo:hover {
+.header-volver:hover {
   background: #fff;
   color: #1a237e;
-}
-
-.seg-btn--deshabilitado,
-.seg-btn--deshabilitado:hover {
-  display: inline-flex;
-  align-items: baseline;
-  gap: .35rem;
-  background: transparent;
-  color: rgba(255,255,255,.4);
-  cursor: default;
-}
-
-.seg-proximamente {
-  font-size: .68rem;
-  font-weight: 400;
 }
 
 /* Foco solo con teclado en el header */
@@ -140,44 +128,6 @@
 .app-header :focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
-}
-
-.seg-btn:focus-visible {
-  outline-offset: -3px;
-}
-
-/* Migas de pan, dentro del header */
-.migas {
-  flex: 1;
-  min-width: 0;
-  padding-left: 1rem;
-  font-size: .85rem;
-  color: rgba(255,255,255,.45);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .1rem .45rem;
-}
-
-.migas a {
-  color: rgba(255,255,255,.75);
-  text-decoration: none;
-}
-
-.migas a:hover {
-  color: #fff;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-}
-
-.migas a[aria-current="page"] {
-  color: #fff;
-  font-weight: 600;
-}
-
-.migas-sep {
-  color: rgba(255,255,255,.35);
 }
 
 /* Participantes dropdown */

@@ -1,4 +1,4 @@
-import { useEffect, useRef, Fragment } from 'react'
+import { useEffect, Fragment } from 'react'
 import './App.css'
 import FieldSuperposition from './components/FieldSuperposition'
 import CapacitorCircuit from './components/CapacitorCircuit'
@@ -22,17 +22,11 @@ const COMPONENTES = {
 export default function App() {
   const ruta = useRuta()
   const info = interpretarRuta(ruta)
-  // Última ruta visitada de cada parcial, para volver ahí desde el selector
-  const ultimaRuta = useRef({})
 
   // Rutas incompletas o inválidas → forma canónica (sin agregar historial)
   useEffect(() => {
     if (info.canonica !== ruta) navegar(info.canonica, { reemplazar: true })
   }, [ruta, info.canonica])
-
-  useEffect(() => {
-    if (info.parcial) ultimaRuta.current[info.parcial.id] = info.canonica
-  }, [info.parcial, info.canonica])
 
   // Al cambiar de página (no de paso ni de pestaña interna), volver arriba
   const pagina = info.landing ? 'landing' : `${info.parcial.id}/${info.tab.id}`
@@ -44,11 +38,9 @@ export default function App() {
       : `${info.tab.label} · ${info.parcial.corto} — Física II`
   }, [info.landing, info.tab, info.parcial])
 
-  const irAParcial = p => navegar(ultimaRuta.current[p.id] ?? `/${p.slug}`)
-
   return (
     <>
-      <Header info={info} onParcial={irAParcial} />
+      <Header info={info} />
 
       {info.landing ? (
         <Landing />

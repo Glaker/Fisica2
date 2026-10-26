@@ -9,7 +9,7 @@
   overflow: hidden;
 }
 
-/* Fondo decorativo (carga puntual y cable), muy tenue */
+/* Fondo animado (canvas con un dipolo y sus líneas de campo), muy tenue */
 .landing-fondo {
   position: absolute;
   inset: 0;
@@ -19,41 +19,114 @@
   z-index: 0;
 }
 
-.landing-fondo-dibujo {
-  opacity: .1;
+/* Botón para ocultar el contenido y ver solo el fondo */
+.landing-ver-fondo {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .5rem .95rem;
+  border: 1px solid #c5cae9;
+  border-radius: 999px;
+  background: rgba(255,255,255,.9);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 10px rgba(30,42,120,.12);
+  color: #3949ab;
+  font: inherit;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, box-shadow .15s;
 }
 
-/* ── Hoja ──────────────────────────────────────────────────────────────────── */
+.landing-ver-fondo svg {
+  width: 18px;
+  height: 18px;
+}
+
+.landing-ver-fondo:hover {
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(30,42,120,.2);
+}
+
+.landing-ver-fondo:focus-visible {
+  outline: 2px solid #3949ab;
+  outline-offset: 2px;
+}
+
+.landing {
+  transition: opacity .35s ease;
+}
+
+.landing--oculto {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Encabezado: sin hoja, directo sobre el fondo ──────────────────────────── */
 .landing {
   position: relative;
   z-index: 1;
-  /* mismo ancho que la tarjeta de contenido de las otras páginas */
   width: 100%;
   max-width: 1168px;
-  padding: 2.75rem 3rem 2rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(30,42,120,0.07);
   color: #262a38;
 }
 
-.landing-titulo {
-  font-size: 3rem;
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -.01em;
-  color: #1a237e;
+.landing-encabezado {
+  text-align: center;
 }
 
 .landing-datos {
-  margin-top: .5rem;
-  font-size: 1rem;
-  color: #6b7080;
+  display: inline-block;
+  padding: .3rem .95rem;
+  border: 1px solid #c5cae9;
+  border-radius: 999px;
+  background: rgba(255,255,255,.7);
+  backdrop-filter: blur(4px);
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #5c6bc0;
+}
+
+.landing-titulo {
+  margin-top: .9rem;
+  font-size: clamp(3.2rem, 8vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -.025em;
+  background: linear-gradient(100deg, #1a237e 10%, #3949ab 50%, #6a4c93 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.landing-bajada {
+  margin-top: .9rem;
+  font-size: 1.1rem;
+  color: #5b6075;
 }
 
 .landing-integrantes {
-  margin-top: .35rem;
-  font-size: .95rem;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .45rem;
+  margin-top: 1.25rem;
+  padding: 0;
+}
+
+.landing-integrantes li {
+  padding: .25rem .8rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  box-shadow: 0 1px 4px rgba(30,42,120,.08);
+  font-size: .85rem;
   color: #3a3e4d;
 }
 
@@ -62,54 +135,93 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.25rem;
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .lp-card {
   --acento: #3949ab;
-  --fondo: #f5f6fc;
-  --borde: #e0e3ee;
-  --borde-hover: #9fa8da;
+  --acento-2: #5c6bc0;
+  --halo: rgba(57,73,171,.22);
 
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding: 1.4rem 1.5rem 1rem;
-  background: var(--fondo);
-  border: 1px solid var(--borde);
-  border-top: 3px solid var(--acento);
-  border-radius: 8px;
+  padding: 1.6rem 1.6rem 1.1rem;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(6px);
+  border: 1px solid #e0e3ee;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(30,42,120,.07);
+}
+
+/* Barra de color arriba */
+.lp-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--acento), var(--acento-2));
 }
 
 .lp-card--p2 {
   --acento: #6a4c93;
-  --fondo: #f7f5fb;
-  --borde-hover: #b7a5d1;
+  --acento-2: #9575cd;
+  --halo: rgba(106,76,147,.24);
+}
+
+/* Número grande de fondo */
+.lp-card-num {
+  position: absolute;
+  top: -.35rem;
+  right: 1rem;
+  font-size: 6.5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--acento);
+  opacity: .07;
+  pointer-events: none;
 }
 
 .lp-card--proximo {
   --acento: #9aa0b4;
+  --acento-2: #c3c7d4;
   justify-content: center;
   align-items: center;
   text-align: center;
-  background: transparent;
-  border: 1.5px dashed #c3c7d4;   /* sin barra de acento arriba */
-  opacity: .6;
+  background: rgba(255,255,255,.4);
+  border: 1.5px dashed #c3c7d4;
+  box-shadow: none;
+  opacity: .7;
+}
+
+.lp-card--proximo::before {
+  display: none;
 }
 
 .lp-card--activa {
   cursor: pointer;
-  transition: transform .15s ease, border-color .15s ease;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
 }
 
 .lp-card--activa:hover {
-  transform: translateY(-2px);
-  border-color: var(--borde-hover);
-  border-top-color: var(--acento);
+  transform: translateY(-4px);
+  border-color: var(--acento-2);
+  box-shadow: 0 14px 32px var(--halo);
+}
+
+.lp-card-etiqueta {
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--acento-2);
 }
 
 .lp-card-titulo {
-  font-size: 1.2rem;
-  font-weight: 600;
+  margin-top: .15rem;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--acento);
 }
 
@@ -122,21 +234,56 @@
 }
 
 .lp-card-cubre {
-  margin-top: .2rem;
+  margin-top: .25rem;
   font-size: .88rem;
-  color: #8a8f9e;
+  color: #7a8092;
 }
 
 .landing-links {
   list-style: none;
-  margin-top: 1rem;
+  margin-top: 1.1rem;
   padding: 0;
-  font-size: 1rem;
-  line-height: 1.5;
 }
 
 .landing-links li + li {
-  margin-top: .75rem;
+  margin-top: .15rem;
+}
+
+/* Cada sección es una fila con flecha que aparece al pasar el mouse */
+.landing-links a {
+  position: relative;
+  display: block;
+  padding: .5rem 1.6rem .5rem .7rem;
+  border-radius: 8px;
+  transition: background .15s;
+}
+
+.landing-links a::after {
+  content: '→';
+  position: absolute;
+  right: .7rem;
+  top: 50%;
+  transform: translate(-4px, -50%);
+  color: var(--acento);
+  opacity: 0;
+  transition: opacity .15s, transform .15s;
+}
+
+.landing-links a:hover {
+  background: color-mix(in srgb, var(--acento) 8%, transparent);
+  text-decoration: none;
+}
+
+.landing-links a:hover::after {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+.landing-link-nombre {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 .landing a {
@@ -150,20 +297,29 @@
   text-underline-offset: 3px;
 }
 
-/* Descripción corta, en su propio renglón debajo del nombre */
 .landing-desc {
   display: block;
   margin-top: .05rem;
-  font-size: .85rem;
+  font-size: .83rem;
   line-height: 1.35;
   color: #8a8f9e;
 }
 
 .landing-destacado {
   align-self: flex-start;
-  margin-top: 1.1rem;
+  margin-top: 1rem;
+  padding: .45rem 1rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--acento), var(--acento-2));
+  font-size: .9rem;
   font-weight: 700;
-  color: var(--acento) !important;
+  color: #fff !important;
+  transition: filter .15s;
+}
+
+.landing .landing-destacado:hover {
+  filter: brightness(1.1);
+  text-decoration: none;
 }
 
 .lp-entrar {
@@ -171,16 +327,8 @@
   margin-top: auto;
   padding-top: 1rem;
   font-size: .82rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--acento);
-}
-
-.landing-pie {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e4e6ee;
-  font-size: .82rem;
-  color: #8a8f9e;
 }
 
 /* Foco solo con teclado */
@@ -212,17 +360,13 @@
     padding: 1rem;
   }
 
-  .landing {
-    padding: 1.75rem 1.25rem 1.5rem;
-  }
-
-  .landing-titulo {
-    font-size: 2.3rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lp-card--activa {
+  .landing,
+  .lp-card--activa,
+  .landing-links a,
+  .landing-links a::after {
     transition: none;
   }
 
