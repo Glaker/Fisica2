@@ -70,8 +70,9 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
       timer = setTimeout(remedir, 250)
     }
     window.addEventListener('resize', alCambiarTamano)
+    window.addEventListener('stp-remedir', remedir)
     document.fonts?.ready.then(remedir)
-    return () => { window.removeEventListener('resize', alCambiarTamano); clearTimeout(timer) }
+    return () => { window.removeEventListener('resize', alCambiarTamano); window.removeEventListener('stp-remedir', remedir); clearTimeout(timer) }
   }, [])
 
   // Al cambiar de paso, si el comienzo del stepper quedó fuera de pantalla, volver arriba
@@ -149,7 +150,7 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
               key={i}
               className={`stp-num${i === pasoVista ? ' stp-num--active' : ''}${i < pasoVista ? ' stp-num--done' : ''}`}
               onClick={() => setPaso(i)}
-              title={p.titulo}
+              data-titulo={p.titulo.replace(/\{\{\w+\||\}\}|\$/g, '')}
               aria-current={i === pasoVista ? 'step' : undefined}
             >
               {i + 1}

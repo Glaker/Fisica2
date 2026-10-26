@@ -10,6 +10,7 @@ import CircuitoRCRL from './components/parcial2/CircuitoRCRL'
 import TeoriaGeneral from './components/parcial2/TeoriaGeneral'
 import Landing from './components/Landing'
 import Header from './components/Header'
+import Presentacion from './components/Presentacion'
 import { interpretarRuta, SECCIONES_EJERCICIO } from './navegacion'
 import { useRuta, navegar, RutaContext } from './router'
 
@@ -41,6 +42,7 @@ export default function App() {
   return (
     <>
       <Header info={info} />
+      <Presentacion />
 
       {info.landing ? (
         <Landing />
