@@ -107,3 +107,36 @@
   background: #fff;
   color: #1a237e;
 }
+
+/* Cuenta en vivo: no más ancha que las lecturas; si no entra, scrollea solo cada fórmula */
+.cj-cuenta {
+  max-width: 100%;
+  min-width: 0;
+  margin-top: .6rem;
+  padding: .55rem .75rem;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e8eaf6;
+}
+
+.cj-cuenta-titulo {
+  font-size: .73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: #888;
+}
+
+.cj-cuenta .katex-display {
+  margin: .35rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: .9em;
+}
+
+.cj-cuenta-nota {
+  margin: .25rem 0 0;
+  font-size: .75rem;
+  line-height: 1.4;
+  color: #666;
+}

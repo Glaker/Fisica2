@@ -129,6 +129,8 @@ export default function CableJVisual({ paso }) {
             />
           </Lecturas>
 
+          <CuentaEnVivo rM={rM} />
+
           {todoElCable && (
             <div className="cj-todo-cable">I_enc = i = 2,5 A (todo el cable)</div>
           )}
@@ -292,5 +294,48 @@ function GraficoJ() {
         <Formula block tex={'c = \\frac{8\\times10^{9}}{\\pi} \\approx 2{,}55\\times10^{9}\\ \\mathrm{A/m^4}'} />
       </div>
     </>
+  )
+}
+
+// ── Cuenta en vivo: reemplaza el valor del slider en las fórmulas ─────────────
+const tex = x => x.replace('.', '{,}')                  // coma decimal sin espacio en KaTeX
+const texFmt = (x, d) => tex(x.toFixed(d))
+
+// 0,003 → "3{,}00\\times10^{-3}"
+function texCientifico(x) {
+  const [m, e] = x.toExponential(2).split('e')
+  return `${tex(m)}\\times10^{${Number(e)}}`
+}
+
+function CuentaEnVivo({ rM }) {
+  const dentro = rM < R
+  const B = texFmt(campoB(rM) * 1e6, 1)
+  let lineas
+  if (rM <= 0) {
+    lineas = ['I_{enc} = 0', `B = 0\\ \\mu\\text{T}`]
+  } else if (dentro) {
+    const I = texFmt(iEnc(rM), 3)
+    const rm = texCientifico(rM)
+    lineas = [
+      `I_{enc} = i\\,(r/R)^4 = 2{,}5 \\cdot (${texFmt(rM / R, 2)})^4 = ${I}\\ \\text{A}`,
+      `B = \\frac{\\mu_0\\, I_{enc}}{2\\pi r} = \\frac{4\\pi\\times10^{-7}\\cdot ${I}}{2\\pi \\cdot ${rm}} = ${B}\\ \\mu\\text{T}`,
+    ]
+  } else {
+    lineas = [
+      'I_{enc} = i = 2{,}5\\ \\text{A}',
+      `B = \\frac{\\mu_0\\, i}{2\\pi r} = \\frac{4\\pi\\times10^{-7}\\cdot 2{,}5}{2\\pi \\cdot ${texCientifico(rM)}} = ${B}\\ \\mu\\text{T}`,
+    ]
+  }
+  return (
+    <div className="cj-cuenta">
+      <div className="cj-cuenta-titulo">Cuenta en vivo</div>
+      {dentro && rM > 0 && (
+        <>
+          <Formula tex={String.raw`\frac{I_{enc}}{i} = \frac{\pi c\, r^4/2}{\pi c\, R^4/2} = \left(\frac{r}{R}\right)^4`} block />
+          <p className="cj-cuenta-nota">se cancelan π, c y el 2</p>
+        </>
+      )}
+      {lineas.map((t, i) => <Formula key={i} tex={t} block />)}
+    </div>
   )
 }
