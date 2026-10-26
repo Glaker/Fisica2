@@ -3,11 +3,13 @@
   display: grid;
   grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
   gap: 1.5rem;
-  align-items: start;
+  align-items: stretch;
+  min-height: var(--stp-alto, 0);   /* alto del paso más grande (lo fija StepperResolucion) */
   scroll-margin-top: 1rem;
 }
 
 .stp-visual {
+  align-self: start;
   position: sticky;
   top: 1rem;
   background: #fafafa;
@@ -31,6 +33,8 @@
 
 .stp-side {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Fila de pasos numerados ───────────────────────────────────────────────── */
@@ -84,6 +88,7 @@
   display: flex;
   flex-direction: column;
   gap: .85rem;
+  flex: 1;
 }
 
 .stp-card-kicker {
@@ -202,7 +207,8 @@
   display: flex;
   justify-content: space-between;
   gap: .5rem;
-  margin-top: .25rem;
+  margin-top: auto;   /* siempre al pie de la tarjeta */
+  padding-top: .25rem;
 }
 
 .stp-controls .tab-btn:disabled {
@@ -215,6 +221,7 @@
 @media (max-width: 860px) {
   .stp-root {
     grid-template-columns: 1fr;
+    min-height: 0;
   }
 
   .stp-visual {

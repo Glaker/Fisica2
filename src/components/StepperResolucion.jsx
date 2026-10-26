@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import Formula, { MathText, MathParagraphs } from './Formula'
 import './StepperResolucion.css'
 
@@ -24,6 +24,40 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
   const rootRef = useRef(null)
   const firstRender = useRef(true)
 
+  /*
+   * Alto fijo: antes del primer pintado se recorren todos los pasos (en useLayoutEffect, sin
+   * parpadeo), se mide el alto del layout en cada uno y se fija el máximo como alto mínimo.
+   * Así la caja no cambia de tamaño y Anterior / Siguiente quedan siempre en el mismo lugar.
+   * `midiendo` = índice del paso que se está midiendo (null = no se está midiendo).
+   */
+  const [alto, setAlto] = useState(null)
+  const [midiendo, setMidiendo] = useState(0)
+  const maxAlto = useRef(0)
+  const total = pasos?.length ?? 0
+
+  useLayoutEffect(() => {
+    if (midiendo == null) return
+    maxAlto.current = Math.max(maxAlto.current, rootRef.current?.offsetHeight ?? 0)
+    if (midiendo + 1 < total) setMidiendo(midiendo + 1)
+    else { setAlto(maxAlto.current); setMidiendo(null) }
+  }, [midiendo, total])
+
+  // Al cambiar el ancho de la ventana o terminar de cargar las fuentes, se vuelve a medir
+  useEffect(() => {
+    const remedir = () => { maxAlto.current = 0; setAlto(null); setMidiendo(0) }
+    let ancho = window.innerWidth
+    let timer
+    const alCambiarTamano = () => {
+      if (window.innerWidth === ancho) return
+      ancho = window.innerWidth
+      clearTimeout(timer)
+      timer = setTimeout(remedir, 250)
+    }
+    window.addEventListener('resize', alCambiarTamano)
+    document.fonts?.ready.then(remedir)
+    return () => { window.removeEventListener('resize', alCambiarTamano); clearTimeout(timer) }
+  }, [])
+
   // Al cambiar de paso, si el comienzo del stepper quedó fuera de pantalla, volver arriba
   useEffect(() => {
     if (firstRender.current) { firstRender.current = false; return }
@@ -36,16 +70,17 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
 
   if (!pasos?.length) return null
 
-  const actual = pasos[paso]
+  const pasoVista = midiendo ?? paso   // durante la medición se muestran todos los pasos en orden
+  const actual = pasos[pasoVista]
   const formulas = actual.formula == null ? []
     : Array.isArray(actual.formula) ? actual.formula : [actual.formula]
   const pregunta = typeof actual.pregunta === 'string'
     ? { pregunta: actual.pregunta } : actual.pregunta
 
   return (
-    <div className="stp-root" ref={rootRef}>
+    <div className="stp-root" ref={rootRef} style={alto != null && midiendo == null ? { '--stp-alto': `${alto}px` } : undefined}>
       <div className="stp-visual">
-        {Visual ? <Visual paso={paso} /> : <div className="stp-visual-empty">Visualización</div>}
+        {Visual ? <Visual paso={pasoVista} /> : <div className="stp-visual-empty">Visualización</div>}
       </div>
 
       <div className="stp-side">
@@ -53,10 +88,10 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
           {pasos.map((p, i) => (
             <button
               key={i}
-              className={`stp-num${i === paso ? ' stp-num--active' : ''}${i < paso ? ' stp-num--done' : ''}`}
+              className={`stp-num${i === pasoVista ? ' stp-num--active' : ''}${i < pasoVista ? ' stp-num--done' : ''}`}
               onClick={() => setPaso(i)}
               title={p.titulo}
-              aria-current={i === paso ? 'step' : undefined}
+              aria-current={i === pasoVista ? 'step' : undefined}
             >
               {i + 1}
             </button>
@@ -64,8 +99,8 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
         </nav>
 
         {/* key → al cambiar de paso se cierran los desplegables */}
-        <article className="stp-card" key={paso}>
-          <div className="stp-card-kicker">Paso {paso + 1} de {pasos.length}</div>
+        <article className="stp-card" key={pasoVista}>
+          <div className="stp-card-kicker">Paso {pasoVista + 1} de {pasos.length}</div>
           <h3 className="stp-card-title"><MathText>{actual.titulo}</MathText></h3>
 
           {actual.texto && (
