@@ -53,6 +53,7 @@ export default function CableJVisual({ paso }) {
   }
 
   const conSlider = paso >= 2 && paso <= 4
+  const rMaxSlider = paso === 2 ? R_MM : R_MAX_MM   // paso 3 es r < R: el slider no pasa del borde del cable
   const rAmp = paso === 1 ? 2 * R_MM : conSlider ? rMm : null
   const rM = rMm / 1000
   const ienc = iEnc(rM)
@@ -109,7 +110,7 @@ export default function CableJVisual({ paso }) {
               r = <strong>{fmt(rMm)} mm</strong>
             </span>
             <input
-              type="range" min={0} max={R_MAX_MM} step={0.05}
+              type="range" min={0} max={rMaxSlider} step={0.05}
               value={rMm}
               onChange={e => setRMm(parseFloat(e.target.value))}
               className="fs-slider"

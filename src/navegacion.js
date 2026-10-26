@@ -20,7 +20,7 @@ export const PARCIALES = [
       { id: 'conductores', label: 'Conductores Concéntricos', desc: 'Gauss con ρ(r) y cascarón conductor' },
       { id: 'fields',      label: 'Superposición de Campos',  desc: 'planos, esfera y anillo; trabajo sobre un electrón' },
       { id: 'capacitors',  label: 'Circuito de Capacitores',  desc: 'serie, paralelo y energía' },
-      { id: 'flashcards',  label: 'Flashcards de Repaso',     desc: 'preguntas de la defensa' },
+      { id: 'flashcards',  label: 'Flashcards de Repaso',     desc: 'preguntas de repaso' },
     ],
   },
   {

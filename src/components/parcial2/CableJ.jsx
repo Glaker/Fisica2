@@ -12,7 +12,7 @@ const PASOS = [
   {
     titulo: 'La situación: cómo está repartida la corriente',
     texto: 'La {{i|corriente}} viaja a lo largo del cable, pero no está {{J|repartida de forma pareja}}: con $J = c\\,r^2$, en el eje ($r = 0$) no circula {{i|corriente}} y en el borde ($r = R$) la {{J|densidad}} es máxima.'
-      + '\n\nComo $J$ cambia con $r$, no se puede calcular la corriente como $J$ por el área: hay que sumar anillo por anillo, es decir, integrar. Es el mismo esquema que la $\\rho(r)$ del primer parcial, cambiando carga por corriente y Gauss por Ampère.',
+      + '\n\nComo $J$ cambia con $r$, no se puede calcular la corriente como $J$ por el área: hay que sumar anillo por anillo, es decir, integrar.',
     formula: 'J(r) = c\\,r^2',
     simbolos: [
       { simbolo: 'J(r)', significado: 'Densidad de corriente: cuánta corriente pasa por cada m² de la sección [A/m²]' },
@@ -116,7 +116,7 @@ const PASOS = [
   {
     titulo: 'a2: la constante c',
     texto: 'La {{i|corriente total}} es la integral de $J$ sobre toda la sección (paso 4). Despejamos $c$ y reemplazamos los datos: $i = 2{,}5$ A y $R = 5$ mm $= 5\\times10^{-3}$ m. Hay que pasar a metros antes de elevar a la cuarta.'
-      + '\n\nDato para la defensa: en el borde, $J$ es el doble del promedio. La corriente está concentrada hacia afuera.',
+      + '\n\nDato útil: en el borde, $J$ es el doble del promedio. La corriente está concentrada hacia afuera.',
     formula: [
       'c = \\eq{cte}{\\frac{2\\,i}{\\pi R^4}}',
       'R^4 = (5\\times10^{-3})^4 = \\hl{6{,}25\\times10^{-10}}\\ \\text{m}^4',

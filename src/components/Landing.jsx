@@ -34,7 +34,7 @@ export default function Landing() {
           <p className="landing-datos">Grupo 3 · Comisión 69 · UTN FRLP · 2026</p>
           <h1 className="landing-titulo">Física&nbsp;II</h1>
           <p className="landing-bajada">
-            Resolución guiada, teoría y preguntas de defensa de cada parcial.
+            Resolución guiada, teoría y preguntas de cada parcial.
           </p>
           <ul className="landing-integrantes" aria-label="Integrantes">
             {PARTICIPANTES.map(n => <li key={n}>{n}</li>)}

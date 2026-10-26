@@ -13,7 +13,7 @@ import './StepperResolucion.css'
  *       formula:  '\\oint \\vec B \\cdot d\\vec l = \\mu_0 I_{enc}',   // string LaTeX o array de strings
  *       simbolos: [{ simbolo: '\\mu_0', significado: 'Permeabilidad del vacío' }],
  *       origen:   'Texto de "¿De dónde sale?" (opcional)',
- *       pregunta: 'Pregunta de defensa' | { pregunta, respuesta }   (opcional)
+ *       pregunta: 'Pregunta' | { pregunta, respuesta }   (opcional)
  *     }
  *   Visual — componente que recibe `paso` (índice activo, base 0) y dibuja el gráfico.
  *   pasoInicial — índice (base 0) con el que arranca; por defecto el primero.
@@ -267,7 +267,7 @@ function PreguntaDefensa({ pregunta, respuesta }) {
   const [open, setOpen] = useState(false)
   return (
     <aside className="stp-defensa">
-      <div className="stp-defensa-label">Pregunta de defensa</div>
+      <div className="stp-defensa-label">Pregunta</div>
       <p className="stp-defensa-q"><MathText>{pregunta}</MathText></p>
       {respuesta && (
         <>
