@@ -6,7 +6,7 @@ import {
 import Formula from '../../Formula'
 import { Lectura, Lecturas } from '../Lectura'
 import { CorteJ, SaleDePantalla, LeyendaJ } from './CorteJ'
-import { I_TOTAL, R, J_PROM, iEnc, campoB, densidadJ, fmt } from './datos'
+import { I_TOTAL, R, J_PROM, iEnc, campoB, densidadJ, fmt, B_MAX } from './datos'
 
 // ── Geometría del SVG ────────────────────────────────────────────────────────
 const CX = 150, CY = 150
@@ -53,7 +53,9 @@ export default function CableJVisual({ paso }) {
   }
 
   const conSlider = paso >= 2 && paso <= 4
-  const rMaxSlider = paso === 2 ? R_MM : R_MAX_MM   // paso 3 es r < R: el slider no pasa del borde del cable
+  // Paso 3 es r < R (de 0 al borde); paso 4 es r > R (del borde a 2R); el resto usa todo el rango
+  const rMinSlider = paso === 3 ? R_MM : 0
+  const rMaxSlider = paso === 2 ? R_MM : paso === 3 ? 2 * R_MM : R_MAX_MM
   const rAmp = paso === 1 ? 2 * R_MM : conSlider ? rMm : null
   const rM = rMm / 1000
   const ienc = iEnc(rM)
@@ -110,7 +112,7 @@ export default function CableJVisual({ paso }) {
               r = <strong>{fmt(rMm)} mm</strong>
             </span>
             <input
-              type="range" min={0} max={rMaxSlider} step={0.05}
+              type="range" min={rMinSlider} max={rMaxSlider} step={0.05}
               value={rMm}
               onChange={e => setRMm(parseFloat(e.target.value))}
               className="fs-slider"
@@ -121,9 +123,10 @@ export default function CableJVisual({ paso }) {
           <Lecturas>
             <Lectura titulo="r" valor={`${fmt(rMm)} mm`} extra={`${fmt(rMm / R_MM)} R`} />
             <Lectura titulo="I_enc" valor={`${fmt(ienc, 3)} A`} extra={`${fmt((ienc / I_TOTAL) * 100, 1)} % de i`} />
-            {paso === 4 && (
-              <Lectura titulo="B" valor={`${fmt(campoB(rM) * 1e6, 1)} μT`} destacado />
-            )}
+            <Lectura
+              titulo="B" valor={`${fmt(campoB(rM) * 1e6, 1)} μT`}
+              extra={`${fmt((campoB(rM) / B_MAX) * 100, 1)} % de B_máx`} destacado={paso === 4}
+            />
           </Lecturas>
 
           {todoElCable && (

@@ -21,7 +21,7 @@ const PASOS = [
     ],
     pregunta: {
       pregunta: '¿Por qué no se puede calcular la corriente como {{i|I}} = {{J|J}}·A?',
-      respuesta: 'Porque {{i|I}} = {{J|J}}·A solo vale si {{J|J}} es igual en toda la sección. Acá {{J|J}} cambia con {{r|r}}, entonces hay que dividir la sección en anillos finitos (donde {{J|J}} sí es constante) y sumarlos con una integral.',
+      respuesta: 'Porque {{i|I}} = {{J|J}}·A solo vale si {{J|J}} es igual en toda la sección. Acá {{J|J}} cambia con {{r|r}}, entonces hay que dividir la sección en anillos infinitesimalmente delgados (donde {{J|J}} sí es constante) y sumarlos con una integral.',
     },
   },
 
@@ -76,7 +76,7 @@ const PASOS = [
     texto: 'Ahora el camino encierra todo el cable, así que la {{eq_itot|corriente encerrada}} es la total, $i$. Es la misma integral del paso anterior, pero hasta $R$.'
       + '\n\nAfuera, el cable se comporta como un hilo con toda la corriente concentrada en el eje: no importa cómo esté repartida adentro.',
     formula: [
-      'i = \\int_0^{\\hl{R}} c\\,r^2 \\cdot 2\\pi r\\,dr = \\eq{itot}{\\frac{\\pi c\\,R^4}{2}}',
+      'i = \\int_0^{\\hl{R}} c\\,r\'^2 \\cdot 2\\pi r\'\\,dr\' = \\eq{itot}{\\frac{\\pi c\\,R^4}{2}}',
       '\\eq{perim}{B \\cdot 2\\pi r} = \\mu_0\\, \\eq{itot}{i} \\;\\Rightarrow\\; B_{ext}(r) = \\eq{bext}{\\frac{\\mu_0\\, i}{2\\pi r}}',
     ],
     simbolos: [
