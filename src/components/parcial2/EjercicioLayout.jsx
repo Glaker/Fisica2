@@ -8,14 +8,14 @@ import './Parcial2.css'
 /*
  * Estructura común de cada ejercicio del Parcial 2.
  *   enunciado      — JSX (si falta, se muestra "En construcción")
- *   pasos + Visual — datos para StepperResolucion (si pasos está vacío, "En construcción")
+ *   pasos + Visual + ecuaciones — datos para StepperResolucion (si pasos está vacío, "En construcción")
  *   teoria         — { secciones, preguntas } para TeoriaApunte
  *
  * La pestaña interna, el paso de la resolución y la vista de las preguntas salen de la URL
  * (#/parcial2/<ejercicio>/<pestaña>/<paso>, #/parcial2/<ejercicio>/teoria/simulacro/curso),
  * vía RutaContext.
  */
-export default function EjercicioLayout({ subtitulo, enunciado, pasos = [], Visual, teoria }) {
+export default function EjercicioLayout({ subtitulo, enunciado, pasos = [], Visual, teoria, ecuaciones }) {
   const ruta = useContext(RutaContext)
   const seccion = ruta?.seccion?.id ?? 'enunciado'
   const pasoInicial = ruta?.paso ? ruta.paso - 1 : 0
@@ -56,7 +56,7 @@ export default function EjercicioLayout({ subtitulo, enunciado, pasos = [], Visu
         )}
         {seccion === 'resolucion' && (
           pasos.length > 0
-            ? <StepperResolucion pasos={pasos} Visual={Visual}
+            ? <StepperResolucion pasos={pasos} Visual={Visual} ecuaciones={ecuaciones}
                                  pasoInicial={pasoInicial} onPasoChange={alCambiarPaso} />
             : <EnConstruccion />
         )}

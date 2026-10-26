@@ -88,7 +88,7 @@ const PASOS = [
       + '\n\nVerificación: $\\varepsilon = I(R_3 + R_4)$ → $5 = \\frac{5}{6} \\cdot 6$ ✓',
     formula: [
       '\\varepsilon \\hl{- I R_3 - I R_4} = 0',
-      'I = \\frac{\\varepsilon}{R_3 + R_4} = \\frac{5}{3+3} = \\frac{5}{6} \\approx \\hl{0{,}833}\\ \\text{A}',
+      'I = \\frac{\\varepsilon}{R_3 + R_4} = \\frac{5}{3+3} = \\eq{iinf}{\\frac{5}{6} \\approx 0{,}833}\\ \\text{A}',
     ],
     simbolos: [
       { simbolo: 'R_3,\\ R_4', significado: '{{R|Resistencias}} de la malla = 3 Ω cada una' },
@@ -106,10 +106,10 @@ const PASOS = [
       + '\n\nEn serie los dos tienen la misma {{Q|carga}}: $Q = 3{,}75$ mC cada uno, con 1,25 V cada uno.'
       + '\n\n**d)** La {{U|energía}} del {{L|inductor}} queda guardada en su campo magnético.',
     formula: [
-      'V = I R_3 = \\frac{5}{6}\\cdot 3 = \\hl{2{,}5}\\ \\text{V}',
-      'C_{eq} = \\frac{C_1 C_2}{C_1 + C_2} = \\frac{3 \\cdot 3}{3 + 3}\\ \\text{mF} = \\hl{1{,}5}\\ \\text{mF}',
-      'Q = C_{eq} V = 1{,}5\\times10^{-3} \\cdot 2{,}5 = \\hl{3{,}75}\\ \\text{mC}',
-      'U_L = \\frac{1}{2} L I^2 = \\frac{1}{2}\\cdot 4\\times10^{-3}\\cdot\\left(\\frac{5}{6}\\right)^2 \\approx \\hl{1{,}39}\\ \\text{mJ}',
+      'V = I R_3 = \\eq{iinf}{\\frac{5}{6}}\\cdot 3 = \\eq{v}{2{,}5}\\ \\text{V}',
+      'C_{eq} = \\frac{C_1 C_2}{C_1 + C_2} = \\frac{3 \\cdot 3}{3 + 3}\\ \\text{mF} = \\eq{ceq}{1{,}5}\\ \\text{mF}',
+      'Q = \\eq{ceq}{C_{eq}}\\, \\eq{v}{V} = \\eq{ceq}{1{,}5\\times10^{-3}} \\cdot \\eq{v}{2{,}5} = \\eq{q0}{3{,}75}\\ \\text{mC}',
+      'U_L = \\frac{1}{2} L I^2 = \\frac{1}{2}\\cdot 4\\times10^{-3}\\cdot\\left(\\eq{iinf}{\\frac{5}{6}}\\right)^2 \\approx \\hl{1{,}39}\\ \\text{mJ}',
     ],
     simbolos: [
       { simbolo: 'C_{eq}', significado: 'Capacidad equivalente de {{C|C1}} y {{C|C2}} en serie [F]' },
@@ -132,9 +132,9 @@ const PASOS = [
       + '\n\nEs un circuito RC de descarga con $R = R_2 + R_3 = 5\\ \\Omega$ y $C_{eq} = 1{,}5$ mF. Planteando Kirchhoff en esa malla, con $i = -dq/dt$ (la {{Q|carga}} baja), la solución es una exponencial decreciente.'
       + '\n\nSobre el {{L|inductor}}: al abrir S2 su {{i|corriente}} se corta de golpe. En la práctica salta una chispa en el interruptor y ahí se disipan los 1,39 mJ. No afecta a los {{C|capacitores}}, que están en otra malla.',
     formula: [
-      '\\frac{q}{C_{eq}} - i\\,(R_2 + R_3) = 0 \\;\\Rightarrow\\; \\hl{\\frac{dq}{dt} = -\\frac{q}{(R_2+R_3)\\,C_{eq}}}',
-      'q(t) = \\hl{Q_0\\, e^{-t/\\tau}}',
-      '\\tau = (R_2+R_3)\\,C_{eq} = 5 \\cdot 1{,}5\\times10^{-3} = \\hl{7{,}5}\\ \\text{ms}',
+      '\\frac{q}{\\eq{ceq}{C_{eq}}} - i\\,(R_2 + R_3) = 0 \\;\\Rightarrow\\; \\hl{\\frac{dq}{dt} = -\\frac{q}{(R_2+R_3)\\,\\eq{ceq}{C_{eq}}}}',
+      'q(t) = \\eq{q0}{Q_0}\\, \\eq{desc}{e^{-t/\\tau}}',
+      '\\tau = (R_2+R_3)\\,\\eq{ceq}{C_{eq}} = 5 \\cdot \\eq{ceq}{1{,}5\\times10^{-3}} = \\eq{tau}{7{,}5}\\ \\text{ms}',
     ],
     simbolos: [
       { simbolo: 'q(t)',   significado: '{{Q|Carga}} en cada {{C|capacitor}} en el instante t [C]' },
@@ -160,9 +160,9 @@ const PASOS = [
       + '\n\nComo 5 s son unas 667 constantes de tiempo, $e^{-10/\\tau}$ es prácticamente 0: en esos 5 s {{R|R2}} disipa toda la {{U|energía}} que le corresponde.'
       + '\n\n**Verificación:** los {{C|capacitores}} tenían $U_C = \\frac{1}{2}C_{eq}V^2 \\approx 4{,}69$ mJ. {{R|R2}} y {{R|R3}} están en serie (misma {{i|corriente}}), así que se reparten esa {{U|energía}} en proporción a su {{R|resistencia}}, 2 : 3. {{R|R2}} se lleva $\\frac{2}{5}\\cdot 4{,}69 \\approx 1{,}875$ mJ ✓',
     formula: [
-      'i(t) = -\\frac{dq}{dt} = \\frac{V_0}{R_2+R_3}\\,e^{-t/\\tau} = \\hl{0{,}5\\,e^{-t/\\tau}}\\ \\text{A}',
+      'i(t) = -\\frac{dq}{dt} = \\frac{\\eq{v}{V_0}}{R_2+R_3}\\,\\eq{desc}{e^{-t/\\tau}} = 0{,}5\\,\\eq{desc}{e^{-t/\\tau}}\\ \\text{A}',
       'P_{R_2}(t) = i^2 R_2 = \\hl{0{,}5\\,e^{-2t/\\tau}}\\ \\text{W}',
-      'E_{R_2} = \\int_0^{5} P_{R_2}\\,dt = 0{,}5\\cdot\\frac{\\tau}{2}\\left(1 - e^{-10/\\tau}\\right) \\approx \\hl{1{,}875}\\ \\text{mJ}',
+      'E_{R_2} = \\int_0^{5} P_{R_2}\\,dt = 0{,}5\\cdot\\frac{\\eq{tau}{\\tau}}{2}\\left(1 - e^{-10/\\tau}\\right) \\approx \\hl{1{,}875}\\ \\text{mJ}',
     ],
     simbolos: [
       { simbolo: 'i(t)',     significado: '{{i|Corriente}} de descarga [A]' },
@@ -183,12 +183,23 @@ const PASOS = [
 // Símbolo → color (ver .mc-* en Parcial2.css)
 const PALETA = { 'ε': 'fem', I: 'i', i: 'i', R: 'R', C: 'C', L: 'L', V: 'V', q: 'Q', Q: 'Q', 'τ': 'tau', U: 'U', E: 'U' }
 
+// Ecuaciones con color propio (el orden define el color). Ver \\eq{...} en las fórmulas.
+const ECUACIONES = {
+  iinf: { label: 'Corriente en t → ∞',        tex: 'I = \\frac{5}{6}\\ \\text{A}' },
+  v:    { label: 'Voltaje de los capacitores', tex: 'V = 2{,}5\\ \\text{V}' },
+  ceq:  { label: 'Capacidad equivalente',      tex: 'C_{eq} = 1{,}5\\ \\text{mF}' },
+  q0:   { label: 'Carga inicial',              tex: 'Q_0 = 3{,}75\\ \\text{mC}' },
+  tau:  { label: 'Constante de tiempo',        tex: '\\tau = 7{,}5\\ \\text{ms}' },
+  desc: { label: 'Decaimiento exponencial',    tex: 'q(t) = Q_0\\, e^{-t/\\tau}' },
+}
+
 export default function CircuitoRCRL() {
   return (
     <PaletaContext.Provider value={PALETA}>
       <EjercicioLayout
         enunciado={<CircuitoEnunciado />}
         pasos={PASOS}
+        ecuaciones={ECUACIONES}
         Visual={CircuitoVisual}
         teoria={{ secciones: teoria.SECCIONES, preguntas: teoria.PREGUNTAS }}
       />

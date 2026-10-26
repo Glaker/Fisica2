@@ -10,6 +10,19 @@ import 'katex/dist/katex.min.css'
  */
 export const PaletaContext = createContext(null)
 
+/*
+ * Ecuaciones con identidad (resaltado por color). Lo provee StepperResolucion:
+ *   { slots: { clave: n },  vistas: Set de claves que ya aparecieron en pasos anteriores }
+ * \eq{clave}{tex} en una fórmula, o {{eq_clave|texto}} en un texto, pinta el fondo con el color
+ * de la clave; el borde marca la primera aparición. Sin contexto se muestra sin color.
+ */
+export const EcuacionesContext = createContext(null)
+
+function clasesEq(clave, ecu) {
+  const slot = ecu?.slots?.[clave]
+  return `eq eqk-${clave}${slot != null ? ` eq-c${slot}` : ''}${ecu && !ecu.vistas.has(clave) ? ' eq-nuevo' : ''}`
+}
+
 const LETRA_SUELTA = /<span class="(mord (?:mathnormal|mathit)(?: mtight)?)"( style="[^"]*")?>([A-Za-zα-ωΑ-Ω])<\/span>/g
 
 function pintar(html, paleta) {
@@ -24,6 +37,7 @@ function pintar(html, paleta) {
 // Renderiza un string LaTeX con KaTeX. `block` = modo display (centrado, tamaño grande).
 export default function Formula({ tex, block = false, className = '' }) {
   const paleta = useContext(PaletaContext)
+  const ecu = useContext(EcuacionesContext)
   const html = useMemo(() => {
     // Subíndices de texto (int, enc, eq…) en romano, para no confundirlos con magnitudes;
     // \Phi en cursiva (el romano no se distingue de un \text{...})
@@ -34,11 +48,15 @@ export default function Formula({ tex, block = false, className = '' }) {
       displayMode: block,
       throwOnError: false,
       strict: code => (code === 'htmlExtension' ? 'ignore' : 'warn'),
-      trust: ctx => ctx.command === '\\htmlClass' && ctx.class === 'hl',
-      macros: { '\\hl': '\\htmlClass{hl}{#1}' },   // \hl{...}: resalta lo que cambia en el paso
+      trust: ctx => ctx.command === '\\htmlClass' && (ctx.class === 'hl' || /^eqk-\w+$/.test(ctx.class)),
+      macros: {
+        '\\hl': '\\htmlClass{hl}{#1}',          // \hl{...}: resultado nuevo de este paso
+        '\\eq': '\\htmlClass{eqk-#1}{#2}',      // \eq{clave}{...}: ecuación con color propio
+      },
     })
-    return paleta ? pintar(out, paleta) : out
-  }, [tex, block, paleta])
+    const conEq = out.replace(/eqk-(\w+)/g, (_, clave) => clasesEq(clave, ecu))
+    return paleta ? pintar(conEq, paleta) : conEq
+  }, [tex, block, paleta, ecu])
   const Tag = block ? 'div' : 'span'
   return <Tag className={className} dangerouslySetInnerHTML={{ __html: html }} />
 }
@@ -59,16 +77,23 @@ function ConFormulas({ text }) {
   return parts.map((part, i) => (i % 2 === 1 ? <Formula key={i} tex={part} /> : <ConColor key={i} text={part} />))
 }
 
-// {{clave|palabras}} → palabras con el color de la magnitud (solo con paleta activa)
+// {{clave|palabras}} → palabras con el color de la magnitud (solo con paleta activa);
+// {{eq_clave|palabras}} → palabras con el color de la ecuación `clave`
 function ConColor({ text }) {
   const paleta = useContext(PaletaContext)
+  const ecu = useContext(EcuacionesContext)
   const parts = text.split(/\{\{(\w+)\|([^}]+)\}\}/g)
   if (parts.length === 1) return text
   const items = []
   for (let i = 0; i < parts.length; i += 3) {
     items.push(parts[i])
     if (i + 2 < parts.length) {
-      items.push(paleta ? <span key={i} className={`mc-${parts[i + 1]}`}>{parts[i + 2]}</span> : parts[i + 2])
+      const clave = parts[i + 1]
+      if (clave.startsWith('eq_')) {
+        items.push(<span key={i} className={clasesEq(clave.slice(3), ecu)}>{parts[i + 2]}</span>)
+      } else {
+        items.push(paleta ? <span key={i} className={`mc-${clave}`}>{parts[i + 2]}</span> : parts[i + 2])
+      }
     }
   }
   return items

@@ -1,5 +1,5 @@
-import { useState, useEffect, useLayoutEffect, useRef } from 'react'
-import Formula, { MathText, MathParagraphs } from './Formula'
+import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import Formula, { MathText, MathParagraphs, EcuacionesContext } from './Formula'
 import './StepperResolucion.css'
 
 /*
@@ -18,8 +18,24 @@ import './StepperResolucion.css'
  *   Visual — componente que recibe `paso` (índice activo, base 0) y dibuja el gráfico.
  *   pasoInicial — índice (base 0) con el que arranca; por defecto el primero.
  *   onPasoChange(i) — se llama cuando el usuario cambia de paso (no al montar).
+ *   ecuaciones — { clave: { label, tex } } (opcional): ecuaciones con identidad. En las fórmulas se
+ *     marcan con \eq{clave}{...} y en los textos con {{eq_clave|palabras}}; cada clave tiene su
+ *     color (por orden), el borde marca su primera aparición y al pasar el mouse se iluminan todas
+ *     sus apariciones. `tex` se usa en el resumen que aparece en el último paso.
  */
-export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPasoChange }) {
+const NUM_SLOTS = 6
+const claveEnFormulas = /\\eq\{(\w+)\}/g
+const claveEnTexto = /\{\{eq_(\w+)\|/g
+
+function clavesDe(paso) {
+  const fs = paso.formula == null ? [] : Array.isArray(paso.formula) ? paso.formula : [paso.formula]
+  const out = new Set()
+  for (const m of fs.join('\n').matchAll(claveEnFormulas)) out.add(m[1])
+  for (const m of [paso.texto, paso.origen].filter(Boolean).join('\n').matchAll(claveEnTexto)) out.add(m[1])
+  return out
+}
+
+export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPasoChange, ecuaciones }) {
   const [paso, setPaso] = useState(() => Math.min(Math.max(pasoInicial, 0), Math.max(pasos.length - 1, 0)))
   const rootRef = useRef(null)
   const firstRender = useRef(true)
@@ -68,16 +84,59 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
     }
   }, [paso])
 
-  if (!pasos?.length) return null
+  // ← → cambian de paso (salvo que el foco esté en un campo, como el slider)
+  useEffect(() => {
+    const alTeclear = e => {
+      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+      const t = e.target
+      if (t.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(t.tagName)) return
+      setPaso(p => Math.min(Math.max(p + (e.key === 'ArrowRight' ? 1 : -1), 0), total - 1))
+    }
+    window.addEventListener('keydown', alTeclear)
+    return () => window.removeEventListener('keydown', alTeclear)
+  }, [total])
 
   const pasoVista = midiendo ?? paso   // durante la medición se muestran todos los pasos en orden
+
+  // Colores por clave (por orden de aparición en `ecuaciones`) y claves ya vistas en pasos anteriores
+  const slots = useMemo(
+    () => Object.fromEntries(Object.keys(ecuaciones ?? {}).map((k, i) => [k, i % NUM_SLOTS])),
+    [ecuaciones],
+  )
+  const vistas = useMemo(() => {
+    const v = new Set()
+    pasos?.slice(0, pasoVista).forEach(p => clavesDe(p).forEach(k => v.add(k)))
+    return v
+  }, [pasos, pasoVista])
+  const ctxEcu = useMemo(() => (ecuaciones ? { slots, vistas } : null), [ecuaciones, slots, vistas])
+  const ctxResumen = useMemo(
+    () => (ecuaciones ? { slots, vistas: new Set(Object.keys(ecuaciones)) } : null),
+    [ecuaciones, slots],
+  )
+
+  // Al pasar el mouse sobre una ecuación se iluminan todas sus apariciones en la tarjeta
+  const cardRef = useRef(null)
+  const iluminar = clave => {
+    cardRef.current?.querySelectorAll('.eq-hover').forEach(el => el.classList.remove('eq-hover'))
+    if (clave) cardRef.current?.querySelectorAll(`.eqk-${clave}`).forEach(el => el.classList.add('eq-hover'))
+  }
+  const claveBajoMouse = e => e.target.closest?.('.eq')?.className.match(/eqk-(\w+)/)?.[1] ?? null
+
+  if (!pasos?.length) return null
+
   const actual = pasos[pasoVista]
   const formulas = actual.formula == null ? []
     : Array.isArray(actual.formula) ? actual.formula : [actual.formula]
   const pregunta = typeof actual.pregunta === 'string'
     ? { pregunta: actual.pregunta } : actual.pregunta
+  const clavesPaso = ecuaciones ? [...clavesDe(actual)].filter(k => ecuaciones[k]) : []
+  const hayHl = formulas.some(f => f.includes('\\hl{'))
+
+  const esUltimo = pasoVista === pasos.length - 1 && midiendo == null
 
   return (
+    <EcuacionesContext.Provider value={ctxEcu}>
     <div className="stp-root" ref={rootRef} style={alto != null && midiendo == null ? { '--stp-alto': `${alto}px` } : undefined}>
       <div className="stp-visual">
         {Visual ? <Visual paso={pasoVista} /> : <div className="stp-visual-empty">Visualización</div>}
@@ -99,7 +158,11 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
         </nav>
 
         {/* key → al cambiar de paso se cierran los desplegables */}
-        <article className="stp-card" key={pasoVista}>
+        <article
+          className="stp-card" key={pasoVista} ref={cardRef}
+          onMouseOver={e => iluminar(claveBajoMouse(e))}
+          onMouseLeave={() => iluminar(null)}
+        >
           <div className="stp-card-kicker">Paso {pasoVista + 1} de {pasos.length}</div>
           <h3 className="stp-card-title"><MathText>{actual.titulo}</MathText></h3>
 
@@ -109,8 +172,18 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
 
           {formulas.length > 0 && (
             <div className="stp-formula">
-              {formulas.some(f => f.includes('\\hl{')) && (
-                <div className="stp-hl-leyenda"><span className="hl">resaltado</span> = lo que cambia respecto del paso anterior</div>
+              {(clavesPaso.length > 0 || hayHl) && (
+                <ul className="stp-leyenda" aria-label="Colores de las ecuaciones">
+                  {clavesPaso.map(k => (
+                    <li key={k}>
+                      <span className={`eq eq-c${slots[k]}${vistas.has(k) ? '' : ' eq-nuevo'} stp-leyenda-muestra`} />
+                      {ecuaciones[k].label}{vistas.has(k) ? '' : ' (nueva)'}
+                    </li>
+                  ))}
+                  {hayHl && (
+                    <li><span className="hl stp-leyenda-muestra" />resultado de este paso</li>
+                  )}
+                </ul>
               )}
               {formulas.map((tex, i) => <Formula key={i} tex={tex} block />)}
             </div>
@@ -156,6 +229,23 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
         </article>
       </div>
     </div>
+
+    {ecuaciones && esUltimo && (
+      <EcuacionesContext.Provider value={ctxResumen}>
+        <section className="stp-resumen">
+          <h3 className="stp-resumen-titulo">Resumen: expresiones clave</h3>
+          <div className="stp-resumen-grid">
+            {Object.entries(ecuaciones).map(([k, { label, tex }]) => (
+              <div key={k} className="stp-resumen-item">
+                <div className="stp-resumen-label">{label}</div>
+                <Formula tex={`\\eq{${k}}{${tex}}`} block />
+              </div>
+            ))}
+          </div>
+        </section>
+      </EcuacionesContext.Provider>
+    )}
+    </EcuacionesContext.Provider>
   )
 }
 

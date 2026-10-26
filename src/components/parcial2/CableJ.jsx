@@ -33,7 +33,7 @@ const PASOS = [
       + '\n\nEl sentido de $B$ sale de la regla de la mano derecha: con la corriente saliendo de la pantalla, $B$ gira en sentido antihorario.',
     formula: [
       '\\oint \\vec B \\cdot d\\vec l = \\mu_0\\, I_{enc}',
-      '\\oint \\vec B \\cdot d\\vec l = \\hl{B \\cdot 2\\pi r}',
+      '\\oint \\vec B \\cdot d\\vec l = \\eq{perim}{B \\cdot 2\\pi r}',
     ],
     simbolos: [
       { simbolo: '\\oint',    significado: 'Integral sobre un camino cerrado (el camino amperiano)' },
@@ -54,8 +54,8 @@ const PASOS = [
     titulo: 'Adentro del cable (r < R)',
     texto: 'El camino encierra solo la {{i|corriente}} que circula más cerca del eje que $r$. Dividimos esa región en anillos delgados de radio $r\'$ y espesor $dr\'$: en cada anillo $J$ es constante, y su área es $dA = 2\\pi r\'\\,dr\'$. Sumamos todos los anillos desde el eje hasta $r$ y reemplazamos en Ampère.',
     formula: [
-      'I_{enc}(r) = \\int_0^r c\\,r\'^2 \\cdot 2\\pi r\'\\,dr\' = \\hl{\\frac{\\pi c\\,r^4}{2}}',
-      'B \\cdot 2\\pi r = \\mu_0 \\hl{\\frac{\\pi c\\,r^4}{2}} \\;\\Rightarrow\\; B_{int}(r) = \\hl{\\frac{\\mu_0\\, c\\, r^3}{4}}',
+      'I_{enc}(r) = \\int_0^r c\\,r\'^2 \\cdot 2\\pi r\'\\,dr\' = \\eq{ienc}{\\frac{\\pi c\\,r^4}{2}}',
+      '\\eq{perim}{B \\cdot 2\\pi r} = \\mu_0 \\eq{ienc}{\\frac{\\pi c\\,r^4}{2}} \\;\\Rightarrow\\; B_{int}(r) = \\eq{bint}{\\frac{\\mu_0\\, c\\, r^3}{4}}',
     ],
     simbolos: [
       { simbolo: 'r\'',  significado: 'Variable de integración: recorre los anillos desde el eje (0) hasta {{r|r}} [m]' },
@@ -73,11 +73,11 @@ const PASOS = [
   // ── 3 ──────────────────────────────────────────────────────────────────────
   {
     titulo: 'Afuera del cable (r > R)',
-    texto: 'Ahora el camino encierra todo el cable, así que la {{i|corriente encerrada}} es la total, $i$. Es la misma integral del paso anterior, pero hasta $R$.'
+    texto: 'Ahora el camino encierra todo el cable, así que la {{eq_itot|corriente encerrada}} es la total, $i$. Es la misma integral del paso anterior, pero hasta $R$.'
       + '\n\nAfuera, el cable se comporta como un hilo con toda la corriente concentrada en el eje: no importa cómo esté repartida adentro.',
     formula: [
-      'i = \\int_0^{\\hl{R}} c\\,r^2 \\cdot 2\\pi r\\,dr = \\hl{\\frac{\\pi c\\,R^4}{2}}',
-      'B \\cdot 2\\pi r = \\mu_0\\, \\hl{i} \\;\\Rightarrow\\; B_{ext}(r) = \\hl{\\frac{\\mu_0\\, i}{2\\pi r}}',
+      'i = \\int_0^{\\hl{R}} c\\,r^2 \\cdot 2\\pi r\\,dr = \\eq{itot}{\\frac{\\pi c\\,R^4}{2}}',
+      '\\eq{perim}{B \\cdot 2\\pi r} = \\mu_0\\, \\eq{itot}{i} \\;\\Rightarrow\\; B_{ext}(r) = \\eq{bext}{\\frac{\\mu_0\\, i}{2\\pi r}}',
     ],
     simbolos: [
       { simbolo: 'i', significado: 'Corriente total del cable [A]' },
@@ -98,8 +98,8 @@ const PASOS = [
       + '\n- En el eje ($r = 0$), $B = 0$ porque no hay {{i|corriente encerrada}}.'
       + '\n- El máximo está en el borde del cable: con los datos, 100 μT.',
     formula: [
-      'B_{int}(r) = \\hl{\\frac{\\mu_0\\, i\\, r^3}{2\\pi R^4}} \\quad (r < R)',
-      'B_{ext}(r) = \\frac{\\mu_0\\, i}{2\\pi r} \\quad (r \\ge R)',
+      'B_{int}(r) = \\eq{bint}{\\frac{\\mu_0\\, i\\, r^3}{2\\pi R^4}} \\quad (r < R)',
+      'B_{ext}(r) = \\eq{bext}{\\frac{\\mu_0\\, i}{2\\pi r}} \\quad (r \\ge R)',
       'B(R) = \\frac{\\mu_0\\, i}{2\\pi R} = \\frac{4\\pi\\times10^{-7}\\cdot 2{,}5}{2\\pi \\cdot 5\\times10^{-3}} = 1\\times10^{-4}\\ \\text{T} = \\hl{100\\ \\mu\\text{T}}',
     ],
     simbolos: [
@@ -118,9 +118,9 @@ const PASOS = [
     texto: 'La {{i|corriente total}} es la integral de $J$ sobre toda la sección (paso 4). Despejamos $c$ y reemplazamos los datos: $i = 2{,}5$ A y $R = 5$ mm $= 5\\times10^{-3}$ m. Hay que pasar a metros antes de elevar a la cuarta.'
       + '\n\nDato para la defensa: en el borde, $J$ es el doble del promedio. La corriente está concentrada hacia afuera.',
     formula: [
-      'c = \\frac{2\\,i}{\\pi R^4}',
+      'c = \\eq{cte}{\\frac{2\\,i}{\\pi R^4}}',
       'R^4 = (5\\times10^{-3})^4 = \\hl{6{,}25\\times10^{-10}}\\ \\text{m}^4',
-      'c = \\frac{2 \\cdot 2{,}5}{\\pi \\cdot 6{,}25\\times10^{-10}} = \\frac{8\\times10^{9}}{\\pi} \\approx \\hl{2{,}55\\times10^{9}}\\ \\text{A/m}^4',
+      'c = \\frac{2 \\cdot 2{,}5}{\\pi \\cdot 6{,}25\\times10^{-10}} = \\frac{8\\times10^{9}}{\\pi} \\approx \\eq{cte}{2{,}55\\times10^{9}}\\ \\text{A/m}^4',
     ],
     simbolos: [
       { simbolo: 'c', significado: 'Constante que ajusta la escala de {{J|J}} [A/m⁴]' },
@@ -136,12 +136,23 @@ const PASOS = [
 // Símbolo → color (ver .mc-* en Parcial2.css)
 const PALETA = { B: 'B', i: 'i', I: 'i', J: 'J', r: 'r', R: 'R', c: 'c', 'μ': 'mu' }
 
+// Ecuaciones con color propio (el orden define el color). Ver \\eq{...} en las fórmulas.
+const ECUACIONES = {
+  perim: { label: 'Circulación de B',     tex: '\\oint \\vec B\\cdot d\\vec l = B \\cdot 2\\pi r' },
+  ienc:  { label: 'Corriente encerrada',  tex: 'I_{enc}(r) = \\frac{\\pi c\\,r^4}{2}' },
+  bint:  { label: 'B adentro (r < R)',    tex: 'B_{int}(r) = \\frac{\\mu_0\\, i\\, r^3}{2\\pi R^4}' },
+  itot:  { label: 'Corriente total',      tex: 'i = \\frac{\\pi c\\,R^4}{2}' },
+  bext:  { label: 'B afuera (r > R)',     tex: 'B_{ext}(r) = \\frac{\\mu_0\\, i}{2\\pi r}' },
+  cte:   { label: 'Constante c',          tex: 'c = \\frac{2\\,i}{\\pi R^4} \\approx 2{,}55\\times10^{9}\\ \\text{A/m}^4' },
+}
+
 export default function CableJ() {
   return (
     <PaletaContext.Provider value={PALETA}>
       <EjercicioLayout
         enunciado={<CableJEnunciado />}
         pasos={PASOS}
+        ecuaciones={ECUACIONES}
         Visual={CableJVisual}
         teoria={{ secciones: teoria.SECCIONES, preguntas: teoria.PREGUNTAS }}
       />

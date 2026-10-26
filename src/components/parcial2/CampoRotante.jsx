@@ -39,8 +39,8 @@ const PASOS = [
       + '\n\n- Espira 1: su normal es horizontal ($\\hat n_1 = \\hat x$), así que ve $B_0\\cos(\\omega t)$.'
       + '\n- Espira 2: su normal es vertical ($\\hat n_2 = \\hat y$), así que ve $B_0\\sin(\\omega t)$.',
     formula: [
-      '\\vec B \\cdot \\hat n_1 = \\hl{B_0 \\cos(\\omega t)}',
-      '\\vec B \\cdot \\hat n_2 = \\hl{B_0 \\sin(\\omega t)}',
+      '\\vec B \\cdot \\hat n_1 = \\eq{esp1}{B_0 \\cos(\\omega t)}',
+      '\\vec B \\cdot \\hat n_2 = \\eq{esp2}{B_0 \\sin(\\omega t)}',
     ],
     simbolos: [
       { simbolo: '\\hat n',              significado: 'Vector normal a la espira (perpendicular a su plano, módulo 1)' },
@@ -60,9 +60,9 @@ const PASOS = [
       + '\n\nCada {{flujo|flujo}} oscila como una onda, con período de 1 s. Son la misma onda corrida un cuarto de vuelta: coseno y seno.',
     formula: [
       '\\Phi = \\int \\vec B \\cdot d\\vec A = \\hl{(\\vec B \\cdot \\hat n)\\, A}',
-      'A = \\pi a^2 = \\pi (0{,}20)^2 = 0{,}04\\pi \\approx \\hl{0{,}126}\\ \\text{m}^2',
-      '\\Phi_1(t) = \\hl{B_0 A \\cos(\\omega t)}',
-      '\\Phi_2(t) = \\hl{B_0 A \\sin(\\omega t)}',
+      'A = \\pi a^2 = \\pi (0{,}20)^2 = 0{,}04\\pi \\approx \\eq{area}{0{,}126}\\ \\text{m}^2',
+      '\\Phi_1(t) = \\eq{esp1}{B_0 A \\cos(\\omega t)}',
+      '\\Phi_2(t) = \\eq{esp2}{B_0 A \\sin(\\omega t)}',
     ],
     simbolos: [
       { simbolo: '\\Phi',     significado: '{{flujo|Flujo}} magnético [Wb = T·m²]' },
@@ -84,11 +84,11 @@ const PASOS = [
       + '\n\nClave: la {{fem|fem}} no depende de cuánto {{flujo|flujo}} hay, sino de qué tan rápido cambia. Por eso cada {{i|corriente}} es máxima cuando su {{flujo|flujo}} vale 0 (ahí la onda del {{flujo|flujo}} tiene la mayor pendiente) y vale 0 cuando el {{flujo|flujo}} es máximo.'
       + '\n\nVerificación con Lenz en $t = 0$: $B$ está horizontal, así que el {{flujo|flujo}} de la espira 2 es 0, pero empieza a crecer hacia arriba. La {{i|corriente}} inducida crea un {{B|campo}} hacia abajo para oponerse: sentido horario visto desde arriba, que coincide con $I_2(0) < 0$.',
     formula: [
-      '\\varepsilon = \\hl{-\\frac{d\\Phi}{dt}}',
-      '\\varepsilon_1(t) = \\hl{B_0 A \\omega \\sin(\\omega t)}',
-      '\\varepsilon_2(t) = \\hl{-B_0 A \\omega \\cos(\\omega t)}',
-      'I_1(t) = \\hl{\\frac{B_0 A \\omega}{R}\\sin(\\omega t)}',
-      'I_2(t) = \\hl{-\\frac{B_0 A \\omega}{R}\\cos(\\omega t)}',
+      '\\varepsilon = \\eq{faraday}{-\\frac{d\\Phi}{dt}}',
+      '\\varepsilon_1(t) = \\eq{esp1}{B_0 A \\omega \\sin(\\omega t)}',
+      '\\varepsilon_2(t) = \\eq{esp2}{-B_0 A \\omega \\cos(\\omega t)}',
+      'I_1(t) = \\eq{esp1}{\\frac{B_0 A \\omega}{R}\\sin(\\omega t)}',
+      'I_2(t) = \\eq{esp2}{-\\frac{B_0 A \\omega}{R}\\cos(\\omega t)}',
     ],
     simbolos: [
       { simbolo: '\\varepsilon',       significado: '{{fem|fem}} inducida [V]' },
@@ -108,17 +108,17 @@ const PASOS = [
   {
     titulo: 'Comportamiento de las corrientes y desfase',
     texto: 'Las dos {{i|corrientes}} tienen la misma amplitud y la misma frecuencia (1 Hz), porque las espiras son iguales y ven el mismo {{B|campo}}. Escribiendo $I_2$ como seno se ve el corrimiento: $I_2$ atrasa $\\pi/2$ respecto de $I_1$.'
-      + '\n\n**Sí, están desfasadas 90°** (0,25 s, un cuarto de período). El desfase copia la geometría: las normales forman 90° y el {{B|campo}} tarda un cuarto de vuelta en pasar de una a la otra.'
+      + '\n\n**{{eq_desf|Sí, están desfasadas 90°}}** (0,25 s, un cuarto de período). El desfase copia la geometría: las normales forman 90° y el {{B|campo}} tarda un cuarto de vuelta en pasar de una a la otra.'
       + '\n\nOtros comentarios:'
       + '\n- Son {{i|corrientes}} alternas: cada una cambia de sentido cada 0,5 s.'
       + '\n- La potencia total disipada es constante: $R(I_1^2 + I_2^2) = \\varepsilon_0^2/R$, porque $\\sin^2 + \\cos^2 = 1$.'
       + '\n- Es un generador bifásico. El proceso inverso (dos bobinas a 90° con {{i|corrientes}} desfasadas 90°) crea un {{B|campo}} rotante: es el principio del motor de inducción.',
     formula: [
-      'I_2(t) = -I_0\\cos(\\omega t) = \\hl{I_0 \\sin\\!\\left(\\omega t - \\frac{\\pi}{2}\\right)}',
-      '\\varepsilon_0 = B_0\\, \\pi a^2\\, \\omega = 0{,}08\\pi^2 B_0 \\approx \\hl{0{,}79\\, B_0}\\ \\text{V}',
-      'I_0 = \\frac{\\varepsilon_0}{R} \\approx \\hl{0{,}039\\, B_0}\\ \\text{A}',
+      'I_2(t) = \\eq{esp2}{-I_0\\cos(\\omega t)} = \\eq{desf}{I_0 \\sin\\!\\left(\\omega t - \\frac{\\pi}{2}\\right)}',
+      '\\varepsilon_0 = B_0\\, \\pi a^2\\, \\omega = 0{,}08\\pi^2 B_0 \\approx \\eq{amp}{0{,}79\\, B_0}\\ \\text{V}',
+      'I_0 = \\frac{\\varepsilon_0}{R} \\approx \\eq{amp}{0{,}039\\, B_0}\\ \\text{A}',
       'T = \\frac{2\\pi}{\\omega} = \\hl{1}\\ \\text{s} \\qquad f = \\hl{1}\\ \\text{Hz}',
-      '\\Delta t = \\frac{T}{4} = \\hl{0{,}25}\\ \\text{s}',
+      '\\Delta t = \\frac{T}{4} = \\eq{desf}{0{,}25}\\ \\text{s}',
     ],
     simbolos: [
       { simbolo: '\\varepsilon_0', significado: 'Amplitud (valor máximo) de la {{fem|fem}} [V]' },
@@ -139,12 +139,23 @@ const PASOS = [
 // Símbolo → color (ver .mc-* en Parcial2.css)
 const PALETA = { B: 'B', I: 'i', R: 'R', A: 'area', 'Φ': 'flujo', 'ε': 'fem', 'ω': 'omega' }
 
+// Ecuaciones con color propio (el orden define el color). Ver \\eq{...} en las fórmulas.
+const ECUACIONES = {
+  esp1:    { label: 'Espira 1',       tex: 'I_1(t) = \\frac{B_0 A \\omega}{R}\\sin(\\omega t)' },
+  esp2:    { label: 'Espira 2',       tex: 'I_2(t) = -\\frac{B_0 A \\omega}{R}\\cos(\\omega t)' },
+  area:    { label: 'Área',           tex: 'A = \\pi a^2 \\approx 0{,}126\\ \\text{m}^2' },
+  faraday: { label: 'Ley de Faraday', tex: '\\varepsilon = -\\frac{d\\Phi}{dt}' },
+  amp:     { label: 'Amplitudes',     tex: '\\varepsilon_0 \\approx 0{,}79\\, B_0\\ \\text{V}' },
+  desf:    { label: 'Desfase',        tex: 'I_2(t) = I_0 \\sin\\!\\left(\\omega t - \\frac{\\pi}{2}\\right)\\ \\Rightarrow\\ \\Delta t = 0{,}25\\ \\text{s}' },
+}
+
 export default function CampoRotante() {
   return (
     <PaletaContext.Provider value={PALETA}>
       <EjercicioLayout
         enunciado={<CampoRotanteEnunciado />}
         pasos={PASOS}
+        ecuaciones={ECUACIONES}
         Visual={CampoRotanteVisual}
         teoria={{ secciones: teoria.SECCIONES, preguntas: teoria.PREGUNTAS }}
       />

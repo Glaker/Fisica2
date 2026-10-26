@@ -229,3 +229,94 @@
     min-height: 0;
   }
 }
+
+/* ── Ecuaciones con identidad: mismo color cada vez que reaparecen ───────────── */
+.eq {
+  --eq-bg: transparent;
+  background: var(--eq-bg);
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px var(--eq-bg);
+  transition: filter .12s;
+}
+
+.eq-c0 { --eq-bg: #c8f0d0; }   /* menta   */
+.eq-c1 { --eq-bg: #cfe6fb; }   /* celeste */
+.eq-c2 { --eq-bg: #f9c9dc; }   /* rosa    */
+.eq-c3 { --eq-bg: #ffdcb5; }   /* durazno */
+.eq-c4 { --eq-bg: #dccdf3; }   /* lila    */
+.eq-c5 { --eq-bg: #c5eef0; }   /* agua    */
+
+/* Primera aparición: borde */
+.eq-nuevo {
+  outline: 2px solid rgba(26, 35, 126, .5);
+  outline-offset: 2px;
+}
+
+/* Al pasar el mouse: se iluminan todas las apariciones */
+.eq-hover {
+  filter: saturate(1.8) brightness(.92);
+  outline: 2px solid #1a237e;
+  outline-offset: 2px;
+}
+
+/* Leyenda sobre las fórmulas */
+.stp-leyenda {
+  list-style: none;
+  margin: 0 0 .6rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .3rem 1rem;
+  font-size: .78rem;
+  color: #555;
+}
+
+.stp-leyenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+
+.stp-leyenda-muestra {
+  display: inline-block;
+  width: 1.1rem;
+  height: .75rem;
+  box-shadow: none;
+}
+
+/* Resumen del último paso */
+.stp-resumen {
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem;
+  background: #f5f7ff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(30,42,120,0.08);
+}
+
+.stp-resumen-titulo {
+  margin: 0 0 .75rem;
+  font-size: 1rem;
+  color: #1a237e;
+}
+
+.stp-resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: .75rem;
+}
+
+.stp-resumen-item {
+  background: #fff;
+  border-radius: 8px;
+  padding: .6rem .8rem;
+  text-align: center;
+}
+
+.stp-resumen-label {
+  font-size: .75rem;
+  font-weight: 600;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
