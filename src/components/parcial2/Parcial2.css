@@ -78,6 +78,28 @@
   gap: .85rem;
 }
 
+.p2-fila {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2rem;
+  align-items: flex-start;
+}
+
+.p2-fila-tabla {
+  flex: 0 1 auto;
+  max-width: 100%;
+}
+
+.p2-fila-pide {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.p2-fila-pide .p2-pide {
+  grid-template-columns: 1fr;
+  margin-top: .75rem;
+}
+
 .p2-pide p {
   font-size: .9rem;
   line-height: 1.6;
@@ -225,3 +247,70 @@
 .p2-root .recharts-wrapper *:focus {
   outline: none;
 }
+
+/* Botón al pie del enunciado */
+.p2-ver-resolucion {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.p2-btn-resolucion {
+  padding: .6rem 1.3rem;
+  border: none;
+  border-radius: 999px;
+  background: #1a237e;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(30, 42, 120, .25);
+  transition: transform .15s, box-shadow .15s;
+}
+
+.p2-btn-resolucion:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(30, 42, 120, .35);
+}
+
+/* Colores por magnitud (Cable J): mismo color en fórmulas, texto y tabla */
+.mc-B  { color: #1565c0; }   /* campo B        */
+.mc-i  { color: #c62828; }   /* corriente i, I */
+.mc-J  { color: #00838f; }   /* densidad J     */
+.mc-r  { color: #2e7d32; }   /* distancia r    */
+.mc-R  { color: #e65100; }   /* radio R        */
+.mc-c  { color: #7b1fa2; }   /* constante c    */
+.mc-mu { color: #6d4c41; }   /* permeabilidad  */
+span[class*="mc-"]:not(.mord) { font-weight: 600; }
+
+/* \hl{...} en fórmulas: lo nuevo respecto del paso anterior */
+.hl {
+  background: #fff3b0;
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px #fff3b0;
+}
+
+.stp-hl-leyenda {
+  margin-bottom: .5rem;
+  font-size: .78rem;
+  color: #777;
+  text-align: center;
+}
+
+.stp-hl-leyenda .hl {
+  padding: 0 .3rem;
+  box-shadow: none;
+  color: #555;
+}
+
+/* Magnitudes de Campo rotante y Circuito */
+.mc-fem   { color: #00838f; }   /* fem ε            */
+.mc-flujo { color: #7b1fa2; }   /* flujo Φ          */
+.mc-omega { color: #2e7d32; }   /* ω                */
+.mc-area  { color: #6d4c41; }   /* área A           */
+.mc-C     { color: #7b1fa2; }   /* capacitor C      */
+.mc-L     { color: #1565c0; }   /* inductor L       */
+.mc-V     { color: #2e7d32; }   /* voltaje V        */
+.mc-Q     { color: #6d4c41; }   /* carga q, Q       */
+.mc-tau   { color: #455a64; }   /* constante τ      */
+.mc-U     { color: #ad1457; }   /* energía U, E     */

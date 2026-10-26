@@ -74,6 +74,9 @@ export default function StepperResolucion({ pasos, Visual, pasoInicial = 0, onPa
 
           {formulas.length > 0 && (
             <div className="stp-formula">
+              {formulas.some(f => f.includes('\\hl{')) && (
+                <div className="stp-hl-leyenda"><span className="hl">resaltado</span> = lo que cambia respecto del paso anterior</div>
+              )}
               {formulas.map((tex, i) => <Formula key={i} tex={tex} block />)}
             </div>
           )}

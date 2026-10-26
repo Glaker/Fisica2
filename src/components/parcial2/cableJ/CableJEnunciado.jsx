@@ -82,15 +82,19 @@ export default function CableJEnunciado() {
         </div>
       </Seccion>
 
-      {/* 3 ── Qué es cada cosa */}
-      <Seccion titulo="Qué es cada cosa">
-        <TablaSimbolos filas={SIMBOLOS} />
-      </Seccion>
-
-      {/* 4 ── Qué pide */}
-      <Seccion titulo="Qué pide">
-        <TarjetasPide tarjetas={PIDE} />
-      </Seccion>
+      {/* 3 ── Qué es cada cosa  |  4 ── Qué pide (lado a lado) */}
+      <div className="p2-fila">
+        <div className="p2-fila-tabla">
+          <Seccion titulo="Qué es cada cosa">
+            <TablaSimbolos filas={SIMBOLOS} />
+          </Seccion>
+        </div>
+        <div className="p2-fila-pide">
+          <Seccion titulo="Qué pide">
+            <TarjetasPide tarjetas={PIDE} />
+          </Seccion>
+        </div>
+      </div>
 
       {/* 5 ── Suposiciones */}
       <Seccion titulo="Suposiciones">

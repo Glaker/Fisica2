@@ -90,7 +90,7 @@ function TarjetaParcial({ parcial: p }) {
 
       {p.id === 2 && (
         <a className="landing-destacado" href={`#${RUTA_SIMULACRO}`} onClick={frenar}>
-          Simulacro de defensa →
+          Cuestionario →
         </a>
       )}
 

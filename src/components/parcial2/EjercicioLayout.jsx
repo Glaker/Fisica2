@@ -42,7 +42,18 @@ export default function EjercicioLayout({ subtitulo, enunciado, pasos = [], Visu
       {subtitulo && <p className="cc2-subtitle">{subtitulo}</p>}
 
       <div className="p2-panel" role="tabpanel">
-        {seccion === 'enunciado' && (enunciado ?? <EnConstruccion />)}
+        {seccion === 'enunciado' && (
+          <>
+            {enunciado ?? <EnConstruccion />}
+            {pasos.length > 0 && (
+              <div className="p2-ver-resolucion">
+                <button className="p2-btn-resolucion" onClick={() => verPaso(1)}>
+                  Ver resolución →
+                </button>
+              </div>
+            )}
+          </>
+        )}
         {seccion === 'resolucion' && (
           pasos.length > 0
             ? <StepperResolucion pasos={pasos} Visual={Visual}
