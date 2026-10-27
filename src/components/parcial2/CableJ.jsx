@@ -106,6 +106,9 @@ const PASOS = [
       { simbolo: 'B_{int}', significado: 'Campo adentro del cable [T]' },
       { simbolo: 'B_{ext}', significado: 'Campo afuera del cable [T]' },
     ],
+    origen: 'Despeje de $c$, a partir de la corriente total del paso anterior: $i = \\frac{\\pi c\\,R^4}{2}$ → multiplicando por 2: $2i = \\pi c\\,R^4$ → dividiendo por $\\pi R^4$: $c = \\frac{2i}{\\pi R^4}$.'
+      + '\n\nReemplazo en $B$ adentro: $B_{int} = \\frac{\\mu_0\\, c\\, r^3}{4} = \\frac{\\mu_0}{4}\\cdot\\frac{2i}{\\pi R^4}\\cdot r^3 = \\frac{2\\mu_0\\, i\\, r^3}{4\\pi R^4} = \\frac{\\mu_0\\, i\\, r^3}{2\\pi R^4}$ (se simplifica 2/4 = 1/2).'
+      + '\n\nContinuidad en $r = R$: $B_{int}(R) = \\frac{\\mu_0\\, i\\, R^3}{2\\pi R^4} = \\frac{\\mu_0\\, i}{2\\pi R} = B_{ext}(R)$.',
     pregunta: {
       pregunta: '¿Por qué {{B|B}} es continuo en {{r|r}} = {{R|R}}?',
       respuesta: 'Porque no hay una corriente concentrada en la superficie del cable: la {{i|corriente encerrada}} crece de forma continua con {{r|r}}, sin saltos. Si hubiera una lámina de corriente en la superficie, {{B|B}} pegaría un salto justo en el borde.',

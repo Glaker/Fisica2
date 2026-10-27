@@ -31,7 +31,7 @@ export default function Landing() {
 
       <main className={`landing${soloFondo ? ' landing--oculto' : ''}`} aria-hidden={soloFondo}>
         <header className="landing-encabezado">
-          <p className="landing-datos">Grupo 3 · Comisión 69 · UTN FRLP · 2026</p>
+          <p className="landing-datos">Grupo 3 · Comisión I22 · UTN FRLP · 2026</p>
           <h1 className="landing-titulo">Física&nbsp;II</h1>
           <p className="landing-bajada">
             Resolución guiada, teoría y preguntas de cada parcial.
