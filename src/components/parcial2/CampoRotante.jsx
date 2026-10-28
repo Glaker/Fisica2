@@ -85,6 +85,7 @@ const PASOS = [
       + '\n\nVerificación con Lenz en $t = 0$: $B$ está horizontal, así que el {{flujo|flujo}} de la espira 2 es 0, pero empieza a crecer hacia arriba. La {{i|corriente}} inducida crea un {{B|campo}} hacia abajo para oponerse: sentido horario visto desde arriba, que coincide con $I_2(0) < 0$.',
     formula: [
       '\\varepsilon = \\eq{faraday}{-\\frac{d\\Phi}{dt}}',
+      '\\varepsilon_1 = -\\frac{d}{dt}\\left[B_0 A\\cos(\\omega t)\\right] = -B_0 A\\left(-\\omega\\sin(\\omega t)\\right)',
       '\\varepsilon_1(t) = \\eq{esp1}{B_0 A \\omega \\sin(\\omega t)}',
       '\\varepsilon_2(t) = \\eq{esp2}{-B_0 A \\omega \\cos(\\omega t)}',
       'I_1(t) = \\eq{esp1}{\\frac{B_0 A \\omega}{R}\\sin(\\omega t)}',
@@ -95,6 +96,7 @@ const PASOS = [
       { simbolo: '\\frac{d\\Phi}{dt}', significado: 'Rapidez con que cambia el {{flujo|flujo}} [Wb/s = V]' },
       { simbolo: 'I',                  significado: '{{i|Corriente}} inducida [A]' },
       { simbolo: 'R',                  significado: '{{R|Resistencia}} de cada espira = 20 Ω' },
+      { simbolo: 'I_1,\\ I_2',         significado: '{{i|Corriente}} de cada espira en el instante t [A]' },
     ],
     origen: 'Las derivadas. $B_0$ y $A$ son constantes y salen afuera. Por regla de la cadena, $\\frac{d}{dt}\\cos(\\omega t) = -\\omega\\sin(\\omega t)$ y $\\frac{d}{dt}\\sin(\\omega t) = \\omega\\cos(\\omega t)$. El $\\omega$ que aparece adelante viene de derivar lo de adentro ($\\omega t$).'
       + '\n\nSentido positivo de cada {{i|corriente}}: regla de la mano derecha con su normal (pulgar según $\\hat n$, los dedos dan el sentido +). Visto desde la punta de $\\hat n$, el sentido + es antihorario.',
@@ -114,15 +116,16 @@ const PASOS = [
       + '\n- La potencia total disipada es constante: $R(I_1^2 + I_2^2) = \\varepsilon_0^2/R$, porque $\\sin^2 + \\cos^2 = 1$.'
       + '\n- Es un generador bifásico. El proceso inverso (dos bobinas a 90° con {{i|corrientes}} desfasadas 90°) crea un {{B|campo}} rotante: es el principio del motor de inducción.',
     formula: [
-      'I_2(t) = \\eq{esp2}{-I_0\\cos(\\omega t)} = \\eq{desf}{I_0 \\sin\\!\\left(\\omega t - \\frac{\\pi}{2}\\right)}',
       '\\varepsilon_0 = B_0\\, \\pi a^2\\, \\omega = 0{,}08\\pi^2 B_0 \\approx \\eq{amp}{0{,}79\\, B_0}\\ \\text{V}',
       'I_0 = \\frac{\\varepsilon_0}{R} \\approx \\eq{amp}{0{,}039\\, B_0}\\ \\text{A}',
+      'I_2(t) = \\eq{esp2}{-I_0\\cos(\\omega t)} = \\eq{desf}{I_0 \\sin\\!\\left(\\omega t - \\frac{\\pi}{2}\\right)}',
       'T = \\frac{2\\pi}{\\omega} = \\hl{1}\\ \\text{s} \\qquad f = \\hl{1}\\ \\text{Hz}',
       '\\Delta t = \\frac{T}{4} = \\eq{desf}{0{,}25}\\ \\text{s}',
     ],
     simbolos: [
       { simbolo: '\\varepsilon_0', significado: 'Amplitud (valor máximo) de la {{fem|fem}} [V]' },
-      { simbolo: 'I_0',            significado: 'Amplitud de la {{i|corriente}} [A]' },
+      { simbolo: 'I_0',            significado: 'Amplitud (valor máximo) de la {{i|corriente}}, la misma para las dos espiras [A]' },
+      { simbolo: 'I_1,\\ I_2',     significado: '{{i|Corriente}} de cada espira en el instante t [A]' },
       { simbolo: 'T',              significado: 'Período: tiempo de una oscilación completa [s]' },
       { simbolo: 'f',              significado: 'Frecuencia: oscilaciones por segundo [Hz]' },
       { simbolo: '\\Delta t',      significado: 'Corrimiento en el tiempo entre las dos {{i|corrientes}} [s]' },

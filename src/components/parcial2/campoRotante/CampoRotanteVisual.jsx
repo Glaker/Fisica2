@@ -30,11 +30,7 @@ export default function CampoRotanteVisual({ paso }) {
   const [t, setT] = useState(0)
   const [play, setPlay] = useState(true)
   const [vel, setVel] = useState(1)
-  const [b0Txt, setB0Txt] = useState(String(B0_DEFECTO))
-
-  const b0Leido = parseFloat(b0Txt.replace(',', '.'))
-  const b0Valido = Number.isFinite(b0Leido) && b0Leido > 0
-  const b0 = b0Valido ? b0Leido : B0_DEFECTO
+  const b0 = B0_DEFECTO
 
   // Animación a velocidad real (× vel); al llegar a T_MAX vuelve a 0
   useEffect(() => {
@@ -62,7 +58,7 @@ export default function CampoRotanteVisual({ paso }) {
   const datos = useMemo(() => TIEMPOS.map(tt => {
     const s = estado(tt, b0)
     return { t: tt, phi1: s.cos, phi2: s.sin, i1n: s.sin, i1: s.i1 * 1000, i2: s.i2 * 1000 }
-  }), [b0])
+  }), [])
 
   return (
     <div className="cr-visual">
@@ -79,16 +75,10 @@ export default function CampoRotanteVisual({ paso }) {
               </button>
             ))}
           </div>
-          <label className="cr-b0">
-            <span>B₀ (T)</span>
-            <input type="number" min="0" step="0.01" value={b0Txt}
-                   onChange={ev => setB0Txt(ev.target.value)} />
-          </label>
+          <span className="cr-b0">B₀ = 0,1 T</span>
         </div>
         <div className="cr-b0-nota">
-          {b0Valido
-            ? 'B₀: valor de ejemplo, el enunciado no lo da.'
-            : `B₀ inválido: se usa ${fmt(B0_DEFECTO, 1)} T.`}
+          B₀: valor de ejemplo, el enunciado no lo da. Los resultados escalan en proporción a B₀.
         </div>
         <div className="fs-slider-row">
           <span className="fs-z-label">t = <strong>{fmt(t)} s</strong></span>
