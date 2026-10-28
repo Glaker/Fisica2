@@ -51,7 +51,7 @@ export const SECCIONES = [
       'U_L = \\frac{1}{2} L I^2',
     ],
     queDice: 'Una bobina. Cuando su {{i|corriente}} cambia, se induce en ella una {{fem|fem}} que se opone al cambio. Su "inercia" es la inductancia $L$ [H]: le cuesta cambiar la {{i|corriente}}, no la {{i|corriente}} en sí. Guarda {{U|energía}} en su campo magnético.',
-    deDondeViene: 'De la Ley de Faraday aplicada al flujo propio: $\\Phi = L\\,i$, entonces $\\varepsilon = -d\\Phi/dt = -L\\,di/dt$ (ver teoría del 1b). **{{U|Energía}}:** mientras la {{i|corriente}} crece, la fuente entrega $P = v\\,i = L\\,i\\,di/dt$ para vencer esa {{fem|fem}}; integrando de 0 a $I$ sale $\\frac12 L I^2$.',
+    deDondeViene: 'De la Ley de Faraday aplicada al flujo propio: $N\\Phi = L\\,i$, entonces $\\varepsilon = -N\\,d\\Phi/dt = -L\\,di/dt$ (ver teoría del 1b). **{{U|Energía}}:** mientras la {{i|corriente}} crece, la fuente entrega $P = v\\,i = L\\,i\\,di/dt$ para vencer esa {{fem|fem}}; integrando de 0 a $I$ sale $\\frac12 L I^2$.',
     cuandoSirve: 'En circuitos, lo importante es que su {{i|corriente}} no puede saltar de golpe: eso exigiría $di/dt$ infinito y un {{V|voltaje}} infinito.',
     enElParcial: { texto: 'U_L = ½·4 mH·(5/6 A)² ≈ 1,39 mJ.', paso: 5 },
     nota: 'Si se corta de golpe la {{i|corriente}} de un {{L|inductor}} (abrir un interruptor), el {{V|voltaje}} sube hasta que salta una chispa. Por eso en el inciso e la {{U|energía}} del {{L|inductor}} se disipa en el interruptor.',

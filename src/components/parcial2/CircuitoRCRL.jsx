@@ -50,7 +50,7 @@ const PASOS = [
       { simbolo: '\\frac{di}{dt}',  significado: 'Rapidez con que cambia la {{i|corriente}} [A/s]' },
     ],
     origen: '$V_C = q/C$ es la definición de capacidad. Para cambiar $q$ tiene que circular {{i|corriente}} durante un tiempo, así que $V_C$ no puede saltar de golpe.'
-      + '\n\n$V_L = L\\,di/dt$ sale de la Ley de Faraday: la {{i|corriente}} del {{L|inductor}} genera un flujo propio $\\Phi = L\\,i$ (esa es la definición de $L$). Si $i$ cambia, cambia el flujo y se induce una {{fem|fem}} que se opone (Lenz). Si $i$ saltara de golpe, $di/dt$ sería infinito y el {{V|voltaje}} también: por eso la {{i|corriente}} del {{L|inductor}} no puede saltar.',
+      + '\n\n$V_L = L\\,di/dt$ sale de la Ley de Faraday: la {{i|corriente}} del {{L|inductor}} genera un flujo propio $\\Phi$ en cada una de sus $N$ vueltas, y la definición de $L$ es $N\\Phi = L\\,i$ (flujo concatenado). Si $i$ cambia, cambia el flujo y se induce una {{fem|fem}} que se opone (Lenz). Si $i$ saltara de golpe, $di/dt$ sería infinito y el {{V|voltaje}} también: por eso la {{i|corriente}} del {{L|inductor}} no puede saltar.',
     pregunta: {
       pregunta: '¿Por qué el {{V|voltaje}} de un {{C|capacitor}} no puede cambiar de golpe?',
       respuesta: 'Porque V = q/C y cambiar la {{Q|carga}} requiere que circule {{i|corriente}} durante un tiempo. Un salto instantáneo de V exigiría una {{i|corriente}} infinita.',
