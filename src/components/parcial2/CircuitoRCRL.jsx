@@ -64,7 +64,7 @@ const PASOS = [
       + '\n\n- **{{R|R2}} y {{R|R3}} no llevan {{i|corriente}}.** El cable de los {{C|capacitores}} deja a C y D al mismo potencial. El camino C → {{R|R2}} → B → {{R|R3}} → D une dos puntos con la misma tensión, y B no tiene otra salida porque {{L|L}} está abierto.'
       + '\n- Queda una sola malla: fuente → A → {{R|R1}} → C → {{C|capacitores}} → D → {{R|R4}} → fuente.',
     formula: [
-      '\\varepsilon \\hl{- I R_1 - I R_4} = 0',
+      '\\varepsilon - I R_1 - I R_4 = 0',
       'I = \\frac{\\varepsilon}{R_1 + R_4} = \\frac{5}{2+3} = \\hl{1}\\ \\text{A}',
     ],
     simbolos: [
@@ -87,7 +87,7 @@ const PASOS = [
       + '\n- Queda una sola malla: fuente → A → S2 → {{L|L}} → B → {{R|R3}} → D → {{R|R4}} → fuente.'
       + '\n\nVerificación: $\\varepsilon = I(R_3 + R_4)$ → $5 = \\frac{5}{6} \\cdot 6$ ✓',
     formula: [
-      '\\varepsilon \\hl{- I R_3 - I R_4} = 0',
+      '\\varepsilon - I R_3 - I R_4 = 0',
       'I = \\frac{\\varepsilon}{R_3 + R_4} = \\frac{5}{3+3} = \\eq{iinf}{\\frac{5}{6} \\approx 0{,}833}\\ \\text{A}',
     ],
     simbolos: [
